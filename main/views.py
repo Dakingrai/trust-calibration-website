@@ -64,9 +64,14 @@ def study(request, pk):
     comp_exp = ast.literal_eval(study_sample.sample.comp_explanations)
     feature_attr = ast.literal_eval(study_sample.sample.feature_attribution)
     comp_conf = ast.literal_eval(study_sample.sample.comp_confidence)
-    mid_comp_exp = [comp_exp[comp_conf.index(min(comp_conf))], comp_exp[comp_conf.index(max(comp_conf))]]
-    mid_feature_attr = [feature_attr[comp_conf.index(min(comp_conf))], feature_attr[comp_conf.index(max(comp_conf))]]
-    mid_comp_conf = [min(comp_conf), max(comp_conf)]
+    if len(comp_conf) > 1:
+        mid_comp_conf = [min(comp_conf), max(comp_conf)]
+        mid_comp_exp = [comp_exp[comp_conf.index(min(comp_conf))], comp_exp[comp_conf.index(max(comp_conf))]]
+        mid_feature_attr = [feature_attr[comp_conf.index(min(comp_conf))], feature_attr[comp_conf.index(max(comp_conf))]]
+    else:
+        mid_comp_conf = comp_conf
+        mid_comp_exp = comp_exp
+        mid_feature_attr = feature_attr
     question = study_sample.sample.question.split()
     ques_and_feat_attr = [zip(question, each) for each in feature_attr]
     ques_and_feat_attr_mid = [zip(question, each) for each in mid_feature_attr]
