@@ -64,15 +64,18 @@ def study(request, pk):
     comp_exp = ast.literal_eval(study_sample.sample.comp_explanations)
     feature_attr = ast.literal_eval(study_sample.sample.feature_attribution)
     comp_conf = ast.literal_eval(study_sample.sample.comp_confidence)
+    mid_comp_exp = [comp_exp[comp_conf.index(min(comp_conf))], comp_exp[comp_conf.index(max(comp_conf))]]
+    mid_feature_attr = [feature_attr[comp_conf.index(min(comp_conf))], feature_attr[comp_conf.index(max(comp_conf))]]
+    mid_comp_conf = [min(comp_conf), max(comp_conf)]
     question = study_sample.sample.question.split()
     ques_and_feat_attr = [zip(question, each) for each in feature_attr]
-    ques_and_feat_attr_mid = [zip(question, each) for each in feature_attr]
+    ques_and_feat_attr_mid = [zip(question, each) for each in mid_feature_attr]
     context = {
         'db': final_context,
         'question': study_sample.sample.question,
         'db_records': ast.literal_eval(study_sample.sample.db_records),
         'comp_exp': comp_exp,
-        'feature_attr_mid': zip(ques_and_feat_attr_mid, comp_exp, comp_conf),
+        'feature_attr_mid': zip(ques_and_feat_attr_mid, mid_comp_exp, mid_comp_conf),
         'feature_attr_high': zip(ques_and_feat_attr, comp_exp, comp_conf),
         'overall_conf': study_sample.sample.confidence,
         'hardness': study_sample.sample.hardness,
