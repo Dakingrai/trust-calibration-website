@@ -1,8 +1,8 @@
 {% extends "main/base.html" %}
 {% block content %}
-    <p>
+    <div class="db_block">
         {% for table in study_sample.db %}
-          <h2> {{ table.table_name }} </h2>
+          <h4> {{ table.table_name }} </h4>
           <table class="table table-sm table-hover">
             <thead>
               <tr>
@@ -22,7 +22,7 @@
             </tbody>
           </table>
         {% endfor %}
-
+    </div>
         <div class="db_records_body card card-body">
           <div class="db_records_block">
               <div class="question">
