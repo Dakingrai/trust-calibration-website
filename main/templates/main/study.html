@@ -54,7 +54,7 @@
                   <ol>
                       {% for exp, exp1, conf in study_sample.feature_attr %}
                       <li>
-                          <p>The model is <b>{{conf}}%</b> confident about <b>"{{ exp1 }}"</b>. The prediction is made because of the following highlighted input: </p>
+                          <p>The model is <b>{{conf}}%</b> confident about <b>{{ exp1 }}</b>. The prediction is made because of the following highlighted input: </p>
                           <p>
                           {% for ques, e in exp %}
                               <span class="highlight" style="background-color: rgba(255, 106, 0, {{e}}); 
