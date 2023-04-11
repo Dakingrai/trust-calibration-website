@@ -66,12 +66,15 @@ def study(request, pk):
     comp_conf = ast.literal_eval(study_sample.sample.comp_confidence)
     question = study_sample.sample.question.split()
     ques_and_feat_attr = [zip(question, each) for each in feature_attr]
+    ques_and_feat_attr_mid = [zip(question, each) for each in feature_attr]
     context = {
         'db': final_context,
         'question': study_sample.sample.question,
         'db_records': ast.literal_eval(study_sample.sample.db_records),
         'comp_exp': comp_exp,
-        'feature_attr': zip(ques_and_feat_attr, comp_exp, comp_conf),
+        'feature_attr_mid': zip(ques_and_feat_attr_mid, comp_exp, comp_conf),
+        'feature_attr_high': zip(ques_and_feat_attr, comp_exp, comp_conf),
+        'overall_conf': study_sample.sample.confidence,
         'hardness': study_sample.sample.hardness,
         'pred_editsql': study_sample.sample.pred_editsql,
         'ground_editsql': study_sample.sample.ground_editsql,

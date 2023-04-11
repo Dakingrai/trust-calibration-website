@@ -1,5 +1,15 @@
 {% extends "main/base.html" %}
 {% block content %}
+    <script>
+      $(document).ready(function() {
+      $('#my-dropdown').change(function() {
+        var selectedDiv = $(this).val();
+        $('.my-div').hide();
+        $('#' + selectedDiv).show();
+      });
+    });
+    </script>
+
     <div class="db_block">
         {% for table in study_sample.db %}
           <h4> {{ table.table_name }} </h4>
@@ -38,50 +48,56 @@
       </div>
   </div>
 
-        <div class="model_exp_block">
-          <h3>Model Explanation </h3>
-          <select id="my-dropdown" >
-              <option value="high" class="dropdown-item">High Transparency</option>
-              <option value="mid" class="dropdown-item">Mid Transparency</option>
-              <option value="low" class="dropdown-item">Low Transparency</option>
-          </select>
-          <div class="model_exp_body card card-body">
-              <h5> The model is 80% confident on this prediction.</h5>
+        
+
+      <div class="model_exp_block">
+        <h3>Model Explanation </h3>
+        <select id="my-dropdown" >
+            <option value="low1" class="dropdown-item">Low Transparency</option>
+            <option value="mid1" class="dropdown-item">Mid Transparency</option>
+            <option value="high1" class="dropdown-item">High Transparency</option>
+        </select>
+        <div class="model_exp_body card card-body">
+            <h5> The model is {{study_sample.overall_conf}}% confident on this prediction.</h5>
+            
+            <div id="low1" class="my-div">
               
-              <div id="low" class="my-div">
-              </div>
-              <div id="mid" class="my-div">
-                  <ol>
-                      {% for exp, exp1, conf in study_sample.feature_attr %}
-                      <li>
-                          <p>The model is <b>{{conf}}%</b> confident about <b>{{ exp1 }}</b>. The prediction is made because of the following highlighted input: </p>
-                          <p>
-                          {% for ques, e in exp %}
-                              <span class="highlight" style="background-color: rgba(255, 106, 0, {{e}}); 
-                              padding: 0 3px;">{{ques}}</span>
-                          {% endfor %}
-                          </p>
-                      </li>
-                      {% endfor %}
-                  </ol>
-              </div>
-              <div id="high" class="my-div">
-                  <ol>
-                      {% for exp, exp1, conf in study_sample.feature_attr_values_high %}
-                      <li>
-                          <p>The model is <b>{{conf}}%</b> confident about <b>"{{ exp1 }}"</b>. The prediction is made because of the following highlighted input: </p>
-                          <p>
-                          {% for ques, e in exp %}
-                              <span class="highlight" style="background-color: rgba(255, 106, 0, {{e}}); 
-                              padding: 0 3px;">{{ques}}</span>
-                          {% endfor %}
-                          </p>
-                      </li>
-                      {% endfor %}
-                  </ol>
-              </div>
-          </div>
-      </div>
+            </div>
+
+            <div id="high1" class="my-div" style="display: none">
+              <ol>
+                {% for exp_high, exp1, conf in study_sample.feature_attr_high %}
+                <li>
+                    <p>The model is <b>{{conf}}%</b> confident about <b>{{ exp1 }}</b>. The prediction is made because of the following highlighted input: </p>
+                    <p>
+                    {% for ques1, e1 in exp_high %}
+                        <span class="highlight" style="background-color: rgba(255, 106, 0, {{e1}}); 
+                        padding: 0 3px;">{{ques1}}</span>
+                    {% endfor %}
+                    </p>
+                </li>
+                {% endfor %}
+              </ol>
+            </div>
+
+            <div id="mid1" class="my-div" style="display: none">
+                <ol>
+                  {% for exp, exp1, conf in study_sample.feature_attr_mid %}
+                  <li>
+                      <p>The model is <b>{{conf}}%</b> confident about <b>{{ exp1 }}</b>. The prediction is made because of the following highlighted input: </p>
+                      <p>
+                        {% for ques1, e1 in exp %}
+                          <span class="highlight" style="background-color: rgba(255, 106, 0, {{e1}}); 
+                        padding: 0 3px;">{{ques1}}</span>
+                        {% endfor %}
+                      </p>
+                  </li>
+                  {% endfor %}
+                </ol>
+            </div>
+            
+        </div>
+    </div>
 
         <form method = "POST">
             {% csrf_token %}
@@ -106,7 +122,3 @@
     </div>
 
 {% endblock content %}
-
-<script>
-  
-</script>
