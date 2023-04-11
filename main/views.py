@@ -8,11 +8,13 @@ import random
 from django.http import HttpResponse
 import pdb
 import ast
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def home(request):
     return render(request, 'main/home.html')
 
-
+@login_required
 def create_samples(request):
     check_samples = Study.objects.filter(user=request.user)
     if len(check_samples) == 0:
@@ -26,7 +28,7 @@ def create_samples(request):
         messages.error(request, f'You already have samples!')
     return redirect(reverse('home'))
 
-
+@login_required
 def start_study(request):
     study_samples = Study.objects.filter(user=request.user, viewed=False).order_by('id').first()
     if study_samples:
@@ -35,7 +37,7 @@ def start_study(request):
         messages.success(request, f'You have completed the study!')
         return redirect(reverse('home'))
 
-
+@login_required
 def study(request, pk):
     study_sample = Study.objects.get(id=pk)
     if request.method == 'POST':
