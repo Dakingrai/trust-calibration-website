@@ -8,3 +8,7 @@ https://gmuedu-my.sharepoint.com/:u:/g/personal/drai2_gmu_edu/EZw8XxVQDvJHoh_oQd
 
 ## Run the script
 ```python manage.py runserver```
+
+## User
+username: Daking
+password: password
