@@ -1,0 +1,6 @@
+{% extends "main/base.html" %}
+{% block content %}
+    <p>This is home page for trust calibration! </p>
+    <a class="btn btn-primary" href="{% url 'create-samples' %}">Create Samples</a>
+    <a class="btn btn-primary" href="{% url 'start-study' %}">Start Study</a>
+{% endblock content %}

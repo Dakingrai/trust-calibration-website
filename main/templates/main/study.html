@@ -1,0 +1,112 @@
+{% extends "main/base.html" %}
+{% block content %}
+    <p>
+        {% for table in study_sample.db %}
+          {{ table.table_name }}
+          <table class="table">
+            <thead>
+              <tr>
+                {% for column in table.columns %}
+                  <th scope="col">{{ column }}</th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for vals in table.values %}
+                <tr>
+                  {% for v in vals %}
+                    <td>{{ v }}</td>
+                  {% endfor %}
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% endfor %}
+
+        <div class="db_records_body card card-body">
+          <div class="db_records_block">
+              <div class="question">
+                  <h3>Question</h3>
+                  <p>{{ study_sample.question }}</p>
+              </div>
+          <h3>Returned Database Records </h3>
+          <ol>
+              {% for record in study_sample.db_records %}
+              <li>{{record}}</li>
+              {% endfor %}
+          </ol>
+      </div>
+  </div>
+
+        <div class="model_exp_block">
+          <h3>Model Explanation </h3>
+          <select id="my-dropdown" >
+              <option value="high" class="dropdown-item">High Transparency</option>
+              <option value="mid" class="dropdown-item">Mid Transparency</option>
+              <option value="low" class="dropdown-item">Low Transparency</option>
+          </select>
+          <div class="model_exp_body card card-body">
+              <h5> The model is 80% confident on this prediction.</h5>
+              
+              <div id="low" class="my-div">
+              </div>
+              <div id="mid" class="my-div">
+                  <ol>
+                      {% for exp, exp1, conf in study_sample.feature_attr %}
+                      <li>
+                          <p>The model is <b>{{conf}}%</b> confident about <b>"{{ exp1 }}"</b>. The prediction is made because of the following highlighted input: </p>
+                          <p>
+                          {% for ques, e in exp %}
+                              <span class="highlight" style="background-color: rgba(255, 106, 0, {{e}}); 
+                              padding: 0 3px;">{{ques}}</span>
+                          {% endfor %}
+                          </p>
+                      </li>
+                      {% endfor %}
+                  </ol>
+              </div>
+              <div id="high" class="my-div">
+                  <ol>
+                      {% for exp, exp1, conf in study_sample.feature_attr_values_high %}
+                      <li>
+                          <p>The model is <b>{{conf}}%</b> confident about <b>"{{ exp1 }}"</b>. The prediction is made because of the following highlighted input: </p>
+                          <p>
+                          {% for ques, e in exp %}
+                              <span class="highlight" style="background-color: rgba(255, 106, 0, {{e}}); 
+                              padding: 0 3px;">{{ques}}</span>
+                          {% endfor %}
+                          </p>
+                      </li>
+                      {% endfor %}
+                  </ol>
+              </div>
+          </div>
+      </div>
+
+        <form method = "POST">
+            {% csrf_token %}
+            <h3> Do you think this is a correct prediction? </h3>
+            <button type="submit" name="btn_value" value="1" class="btn btn-primary btn-lg" style="margin-right:40px">Yes</button>
+            <button type="submit" name="btn_value" value="0" class="btn btn btn-danger btn-lg">No</button>
+        </form>
+    </p>
+
+    <p>
+      <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+        Show/Hide Details
+      </a>
+    </p>
+    <div class="collapse" id="collapseExample">
+      <div class="card card-body">
+          <h4>Hardness: </h4> {{study_sample.hardness}}
+          <h4>EditSQL (Prediction): </h4> {{study_sample.pred_editsql}}
+          <h4>EditSQL (Gold): </h4> {{study_sample.ground_editsql}}
+          <h4>Correct Prediction: </h4> Yes
+      </div>
+    </div>
+
+{% endblock content %}
+
+<script>
+  
+</script>
