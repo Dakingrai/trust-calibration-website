@@ -2,8 +2,8 @@
 {% block content %}
     <p>
         {% for table in study_sample.db %}
-          {{ table.table_name }}
-          <table class="table">
+          <h2> {{ table.table_name }} </h2>
+          <table class="table table-sm table-hover">
             <thead>
               <tr>
                 {% for column in table.columns %}
