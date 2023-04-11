@@ -50,7 +50,7 @@ def study(request, pk):
         study_sample.save()
         return redirect(reverse('start-study'))
     
-    db_name = study_sample.sample.database.db_name
+    db_name = study_sample.sample.database_name
     all_db_schema = db_test.objects.all().first().all_db
     all_db_schema = ast.literal_eval(all_db_schema)
     schema_and_values = all_db_schema[db_name]

@@ -25,7 +25,6 @@ class Samples(models.Model):
     ground_sql = models.CharField(max_length=256, null=True, blank=True)
     pred_sql = models.CharField(max_length=256, null=True, blank=True)
     hardness = models.CharField(max_length=9)
-    database = models.ForeignKey(Spider_db, null=True, blank=True, on_delete=models.SET_NULL)
     db_records = models.TextField(null=True, blank=True)
     components = models.TextField()
     comp_explanations = models.TextField()
