@@ -18,7 +18,8 @@
     <div class="collapse" id="collapseExample1">
       <div class="card card-body">
         <div class="db_block">
-          <span style="padding-bottom: 20px;"> There are {{study_sample.no_tables}} tables in the database({{study_sample.db_name}}), and below are the columns and some records for each of them. </span>
+          <b style="padding-bottom: 20px;"> The {{study_sample.db_name}} database has {{study_sample.no_tables}} tables, and below are the columns and some records for each of them. </b>
+          <p></p>
           {% for table in study_sample.db %}
           <div class="card">
             <h6 class="card-header">
@@ -124,18 +125,18 @@
             </div>
 
             <div id="mid1" class="my-div" style="display: none">
-                <ol>
-                  {% for exp, exp1, conf in study_sample.feature_attr_mid %}
+              <ol>
+                  {% for exp, exp1, conf, mid_desc in study_sample.feature_attr_mid %}
                   <li>
                       
                         {% if mid %}
                           {% for ques1, e1 in exp %}
-                          <p>The model is <b>{{conf}}%</b> confident about <b>{{ exp1 }}</b>. The prediction is made because of the following highlighted input: </p>
+                          <p>The model is <b>{{mid_desc}}</b> confident ({{conf}})% about <b>{{ exp1 }}</b>. The prediction is made because of the following highlighted input: </p>
                             <span class="highlight" style="background-color: rgba(255, 106, 0, {{e1}}); 
                           padding: 0 3px;">{{ques1}}</span>
                           {% endfor %}
                         {% else %}
-                        <p>The model is <b>{{conf}}%</b> confident about <b>{{ exp1 }}</b>. The prediction is made because of the following highlighted input: </p>
+                        <p>The model is <b>{{mid_desc}}</b> confident ({{conf}})% about <b>{{ exp1 }}</b>. The prediction is made because of the following highlighted input: </p>
                           {% for ques1, e1 in exp %}
                             <span class="highlight" style="background-color: rgba(255, 106, 0, {{e1}}); padding: 0px 3px;">{{ques1}}</span>
                           {% endfor %}
@@ -158,8 +159,7 @@
     </p>
 
     <p>
-      <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-        Show/Hide Details
+      <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">Show/Hide Details
       </a>
     </p>
     <div class="collapse" id="collapseExample">
