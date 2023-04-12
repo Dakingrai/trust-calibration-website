@@ -18,6 +18,7 @@
     <div class="collapse" id="collapseExample1">
       <div class="card card-body">
         <div class="db_block">
+          <span style="padding-bottom: 20px;"> There are {{study_sample.no_tables}} tables in the database({{study_sample.db_name}}), and below are the columns and some records for each of them. </span>
           {% for table in study_sample.db %}
           <div class="card">
             <h6 class="card-header">

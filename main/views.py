@@ -88,6 +88,8 @@ def study(request, pk):
         'hardness': study_sample.sample.hardness,
         'pred_editsql': study_sample.sample.pred_editsql,
         'ground_editsql': study_sample.sample.ground_editsql,
+        "no_tables": len(final_context),
+        "db_name": db_name,
     }
     return render(request, 'main/study.html', {'study_sample': context})
 
