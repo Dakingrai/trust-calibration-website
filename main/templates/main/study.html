@@ -103,11 +103,8 @@
             <option value="high1" class="dropdown-item">High Transparency</option>
         </select>
         <div class="model_exp_body card card-body">
-            <h5> The model is {{study_sample.overall_conf}}% confident on this prediction.</h5>
-            
-            <div id="low1" class="my-div">
-              
-            </div>
+            <h5> The model has an overall confidence of {{study_sample.overall_conf}}% in making this prediction.</h5>
+            <div id="low1" class="my-div"></div>
 
             <div id="high1" class="my-div" style="display: none">
               <ol>
