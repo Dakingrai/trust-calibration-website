@@ -6,7 +6,6 @@ charset-normalizer==2.0.12
 click==8.0.4
 colorama==0.4.5
 cycler==0.11.0
-dataclasses @ file:///tmp/build/80754af9/dataclasses_1614363715916/work
 Django==3.2.18
 django-crispy-forms==1.13.0
 filelock==3.4.1
