@@ -36,8 +36,6 @@ sentencepiece==0.1.97
 six @ file:///tmp/build/80754af9/six_1644875935023/work
 sqlparse==0.4.3
 threadpoolctl==3.1.0
-torchaudio==0.10.2
-torchvision==0.11.3
 tqdm==4.64.1
 typing_extensions @ file:///opt/conda/conda-bld/typing_extensions_1647553014482/work
 urllib3==1.26.15
