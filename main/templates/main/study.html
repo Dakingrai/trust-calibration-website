@@ -105,10 +105,10 @@
             <option value="high1" class="dropdown-item">High Transparency</option>
         </select>
         <div class="model_exp_body card card-body">
-            <h5> The model has an overall confidence of {{study_sample.overall_conf}}% in making this prediction.</h5>
-            <div id="low1" class="my-div"></div>
+            <div id="low1" class="my-div"><h5> The model has an overall confidence of {{study_sample.overall_conf}}% in making this prediction.</h5></div>
 
             <div id="high1" class="my-div" style="display: none">
+              <h5> The model has an overall confidence of {{study_sample.overall_conf}}% in making this prediction. In particular, </h5>
               <ol>
                 {% for exp_high, exp1, conf in study_sample.feature_attr_high %}
                 <li>
@@ -125,6 +125,7 @@
             </div>
 
             <div id="mid1" class="my-div" style="display: none">
+              <h5> The model has an overall confidence of {{study_sample.overall_conf}}% in making this prediction. In particular, </h5>
               <ol>
                   {% for exp, exp1, conf, mid_desc in study_sample.feature_attr_mid %}
                   <li>
@@ -165,8 +166,8 @@
     <div class="collapse" id="collapseExample">
       <div class="card card-body">
           <h4>Hardness: </h4> {{study_sample.hardness}}
-          <h4>EditSQL (Prediction): </h4> {{study_sample.pred_editsql}}
-          <h4>EditSQL (Gold): </h4> {{study_sample.ground_editsql}}
+          <h4>SQL (Prediction): </h4> {{study_sample.pred_sql}}
+          <h4>SQL (Gold): </h4> {{study_sample.ground_sql}}
           <h4>Correct Prediction: </h4> Yes
       </div>
     </div>

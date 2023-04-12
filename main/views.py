@@ -89,8 +89,8 @@ def study(request, pk):
         'feature_attr_high': zip(ques_and_feat_attr, comp_exp, comp_conf),
         'overall_conf': study_sample.sample.confidence,
         'hardness': study_sample.sample.hardness,
-        'pred_editsql': study_sample.sample.pred_editsql,
-        'ground_editsql': study_sample.sample.ground_editsql,
+        'pred_sql': study_sample.sample.pred_sql,
+        'ground_sql': study_sample.sample.ground_sql,
         "no_tables": len(final_context),
         "db_name": db_name,
     }
