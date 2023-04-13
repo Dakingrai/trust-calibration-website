@@ -28,6 +28,11 @@ def create_samples(request):
         messages.error(request, f'You already have samples!')
     return redirect(reverse('home'))
 
+def reset_study(request):
+    Study.objects.filter(user=request.user).update(viewed=False)
+    messages.success(request, f'Your study has been reset!')
+    return redirect(reverse('home'))
+                    
 @login_required
 def start_study(request):
     study_samples = Study.objects.filter(user=request.user, viewed=False).order_by('id').first()

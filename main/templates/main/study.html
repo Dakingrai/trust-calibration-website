@@ -132,12 +132,12 @@
                       
                         {% if mid %}
                           {% for ques1, e1 in exp %}
-                          <p>The model is <b>{{mid_desc}}</b> confident ({{conf}})% about <b>{{ exp1 }}</b>. The prediction is made because of the following highlighted input: </p>
+                          <p>The model is <b>{{mid_desc}}</b> confident ({{conf}}%) about <b>{{ exp1 }}</b>. The prediction is made because of the following highlighted input: </p>
                             <span class="highlight" style="background-color: rgba(255, 106, 0, {{e1}}); 
                           padding: 0 3px;">{{ques1}}</span>
                           {% endfor %}
                         {% else %}
-                        <p>The model is <b>{{mid_desc}}</b> confident ({{conf}})% about <b>{{ exp1 }}</b>. The prediction is made because of the following highlighted input: </p>
+                        <p>The model is <b>{{mid_desc}}</b> confident ({{conf}}%) about <b>{{ exp1 }}</b>. The prediction is made because of the following highlighted input: </p>
                           {% for ques1, e1 in exp %}
                             <span class="highlight" style="background-color: rgba(255, 106, 0, {{e1}}); padding: 0px 3px;">{{ques1}}</span>
                           {% endfor %}
