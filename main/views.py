@@ -12,7 +12,10 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def home(request):
-    return render(request, 'main/home.html')
+    not_responded_count = Study.objects.filter(user=request.user, viewed=False).count()
+    all_count = Study.objects.all().count()
+    context = {'not_responded_count': not_responded_count, 'all_count': all_count}
+    return render(request, 'main/home.html', context)
 
 @login_required
 def create_samples(request):

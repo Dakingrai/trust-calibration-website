@@ -18,12 +18,12 @@
     <div class="collapse" id="collapseExample1">
       <div class="card card-body">
         <div class="db_block">
-          <b style="padding-bottom: 20px;"> The {{study_sample.db_name}} database has {{study_sample.no_tables}} tables, and below are the columns and some records for each of them. </b>
+          <b style="padding-bottom: 20px;"> Database name: {{study_sample.db_name}} </b>
           <p></p>
           {% for table in study_sample.db %}
           <div class="card">
             <h6 class="card-header">
-              {{ table.table_name }}
+              Table {{forloop.counter}}: {{ table.table_name }}
             </h6>
             <div class="card-body">
               <table class="table table-sm table-hover">
