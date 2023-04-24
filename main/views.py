@@ -15,9 +15,13 @@ from django.contrib.auth.decorators import login_required
 def home(request):
     not_responded_count = Study.objects.filter(user=request.user, viewed=False).count()
     all_count = Study.objects.all().count()
-    correct_count = Study.objects.filter(user=request.user, user_response=True).count()
-    incorrect_count = Study.objects.filter(user=request.user, user_response=False).count()
-    context = {'not_responded_count': not_responded_count, 'all_count': all_count, "responded_count": all_count-not_responded_count, "correct_count": correct_count, "incorrect_count": incorrect_count}
+    n_correct_response = Study.objects.filter(user=request.user, user_response=True, sample__correct_prediction=True, viewed=True).count() + Study.objects.filter(user=request.user, user_response=False, sample__correct_prediction=False, viewed=True).count()
+    context = {
+        'not_responded_count': not_responded_count, 
+        'all_count': all_count, 
+        "responded_count": all_count-not_responded_count,
+        "n_correct_response": n_correct_response,
+        }
     return render(request, 'main/home.html', context)
 
 @login_required
@@ -72,7 +76,6 @@ def study(request, pk):
                               'columns': [c.strip() for c in each['columns'].strip().split(",")],
                               'values': ast.literal_eval(each['records'])
                               })
-    # pdb.set_trace()
     comp_exp = ast.literal_eval(study_sample.sample.comp_explanations)
     feature_attr = ast.literal_eval(study_sample.sample.feature_attribution)
     comp_conf = ast.literal_eval(study_sample.sample.comp_confidence)
@@ -82,10 +85,17 @@ def study(request, pk):
     sorted_comp_conf, sorted_feature_attr = [list(t) for t in zip(*sorted_ac)]
     if len(comp_conf) > 1:
         mid_comp_conf = [max(comp_conf), min(comp_conf)]
-        mid_comp_exp = [comp_exp[comp_conf.index(max(comp_conf))], comp_exp[comp_conf.index(min(comp_conf))]]
-        mid_feature_attr = [feature_attr[comp_conf.index(max(comp_conf))], feature_attr[comp_conf.index(min(random.shuffle(comp_conf)))]]
-        mid = True
-        mid_desc = ["most", "least"]
+        
+        if comp_conf.index(min(comp_conf)) != comp_conf.index(max(comp_conf)):
+            mid_comp_exp = [comp_exp[comp_conf.index(max(comp_conf))], comp_exp[comp_conf.index(min(comp_conf))]]
+            mid_feature_attr = [feature_attr[comp_conf.index(max(comp_conf))], feature_attr[comp_conf.index(min(comp_conf))]]
+            mid = True
+            mid_desc = ["most", "least"]
+        else:
+            mid_comp_exp = [comp_exp[comp_conf.index(max(comp_conf))], comp_exp[comp_conf.index(min(comp_conf))+1]]
+            mid_feature_attr = [feature_attr[comp_conf.index(max(comp_conf))], feature_attr[comp_conf.index(min(comp_conf))+1]]
+            mid = True
+            mid_desc = ["most", "least"]
     else:
         mid_comp_conf = comp_conf
         mid_comp_exp = comp_exp
@@ -95,14 +105,13 @@ def study(request, pk):
     question = study_sample.sample.question.split()
     ques_and_feat_attr = [zip(question, each) for each in sorted_feature_attr]
     ques_and_feat_attr_mid = [zip(question, each) for each in mid_feature_attr]
-    
     context = {
         'db': final_context,
         'question': study_sample.sample.question,
         'db_records': ast.literal_eval(study_sample.sample.db_records),
         'comp_exp': comp_exp,
         'feature_attr_mid': zip(ques_and_feat_attr_mid, mid_comp_exp, mid_comp_conf, mid_desc),
-        'feature_attr_high': zip(ques_and_feat_attr, sorted_comp_exp, sorted_comp_conf),
+        'feature_attr_high': zip(ques_and_feat_attr, comp_exp, comp_conf),
         'overall_conf': study_sample.sample.confidence,
         'hardness': study_sample.sample.hardness,
         'pred_sql': study_sample.sample.pred_sql,
