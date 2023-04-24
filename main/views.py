@@ -83,7 +83,7 @@ def study(request, pk):
     if len(comp_conf) > 1:
         mid_comp_conf = [max(comp_conf), min(comp_conf)]
         mid_comp_exp = [comp_exp[comp_conf.index(max(comp_conf))], comp_exp[comp_conf.index(min(comp_conf))]]
-        mid_feature_attr = [feature_attr[comp_conf.index(max(comp_conf))], feature_attr[comp_conf.index(min(comp_conf))]]
+        mid_feature_attr = [feature_attr[comp_conf.index(max(comp_conf))], feature_attr[comp_conf.index(min(random.shuffle(comp_conf)))]]
         mid = True
         mid_desc = ["most", "least"]
     else:
