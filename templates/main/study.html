@@ -1,0 +1,177 @@
+{% extends "main/base.html" %}
+{% block content %}
+    <script>
+      $(document).ready(function() {
+      $('#my-dropdown').change(function() {
+        var selectedDiv = $(this).val();
+        $('.my-div').hide();
+        $('#' + selectedDiv).show();
+      });
+    });
+    </script>
+
+    <p style="margin-top:25px;">
+      <a class="btn btn-info" data-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample1">
+        View Database
+      </a>
+    </p>
+    <div class="collapse" id="collapseExample1">
+      <div class="card card-body">
+        <div class="db_block">
+          <b style="padding-bottom: 20px;"> Database name: {{study_sample.db_name}} </b>
+          <p></p>
+          {% for table in study_sample.db %}
+          <div class="card">
+            <h6 class="card-header">
+              Table {{forloop.counter}}: {{ table.table_name }}
+            </h6>
+            <div class="card-body">
+              <table class="table table-sm table-hover">
+                <thead>
+                  <tr>
+                    {% for column in table.columns %}
+                      <th scope="col">{{ column }}</th>
+                    {% endfor %}
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for vals in table.values %}
+                    <tr>
+                      {% for v in vals %}
+                        <td>{{ v }}</td>
+                      {% endfor %}
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          {% endfor %}
+      </div>
+      </div>
+    </div>
+
+    <!-- <div class="db_block">
+        {% for table in study_sample.db %}
+        <div class="card">
+          <h6 class="card-header">
+            {{ table.table_name }}
+          </h6>
+          <div class="card-body">
+            <table class="table table-sm table-hover">
+              <thead>
+                <tr>
+                  {% for column in table.columns %}
+                    <th scope="col">{{ column }}</th>
+                  {% endfor %}
+                </tr>
+              </thead>
+              <tbody>
+                {% for vals in table.values %}
+                  <tr>
+                    {% for v in vals %}
+                      <td>{{ v }}</td>
+                    {% endfor %}
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        {% endfor %}
+    </div> -->
+        <div class="db_records_body card card-body">
+          <div class="db_records_block">
+              <div class="question">
+                  <h3>Question</h3>
+                  <p>{{ study_sample.question }}</p>
+              </div>
+          <h3>Returned Database Records </h3>
+          <ol>
+              {% for record in study_sample.db_records %}
+              <li>{{record}}</li>
+              {% endfor %}
+          </ol>
+      </div>
+  </div>
+
+        
+
+      <div class="model_exp_block">
+        <h3>Model Explanation </h3>
+        <select id="my-dropdown" >
+            <option value="low1" class="dropdown-item">Low Transparency</option>
+            <option value="mid1" class="dropdown-item">Mid Transparency</option>
+            <option value="high1" class="dropdown-item">High Transparency</option>
+        </select>
+        <div class="model_exp_body card card-body">
+            <div id="low1" class="my-div"><h5> The model has an overall confidence of {{study_sample.overall_conf}}% in making this prediction.</h5></div>
+
+            <div id="high1" class="my-div" style="display: none">
+              <h5> The model has an overall confidence of {{study_sample.overall_conf}}% in making this prediction. In particular, </h5>
+              <ol>
+                {% for exp_high, exp1, conf in study_sample.feature_attr_high %}
+                <li>
+                    <p>The model is <b>{{conf}}%</b> confident about <b>{{ exp1 }}</b>. The prediction is made because of the following highlighted input: </p>
+                    <p>
+                    {% for ques1, e1 in exp_high %}
+                        <span class="highlight" style="background-color: rgba(255, 106, 0, {{e1}}); 
+                        padding: 0 3px;">{{ques1}}</span>
+                    {% endfor %}
+                    </p>
+                </li>
+                {% endfor %}
+              </ol>
+              <div style="background-color: #D5D5D5; padding: 5px 15px; margin-top: 10px; font-style: italic; font-weight: bold;">Note: Words highlighted with a stronger color indicate that the model relies more heavily on those words to generate the given output. </div>
+            </div>
+
+            <div id="mid1" class="my-div" style="display: none">
+              <h5> The model has an overall confidence of {{study_sample.overall_conf}}% in making this prediction. In particular, </h5>
+              <ol>
+                  {% for exp, exp1, conf, mid_desc in study_sample.feature_attr_mid %}
+                  <li>
+                      
+                        {% if mid %}
+                          {% for ques1, e1 in exp %}
+                          <p>The model is <b>{{mid_desc}}</b> confident ({{conf}}%) about <b>{{ exp1 }}</b>. The prediction is made because of the following highlighted input: </p>
+                            <span class="highlight" style="background-color: rgba(255, 106, 0, {{e1}}); 
+                          padding: 0 3px;">{{ques1}}</span>
+                          {% endfor %}
+                        {% else %}
+                        <p>The model is <b>{{mid_desc}}</b> confident ({{conf}}%) about <b>{{ exp1 }}</b>. The prediction is made because of the following highlighted input: </p>
+                          {% for ques1, e1 in exp %}
+                            <span class="highlight" style="background-color: rgba(255, 106, 0, {{e1}}); padding: 0px 3px;">{{ques1}}</span>
+                          {% endfor %}
+                        {% endif %}
+                      </p>
+                  </li>
+                  {% endfor %}
+                </ol>
+                <div style="background-color: #D5D5D5; padding: 5px 15px; margin-top: 10px; font-style: italic; font-weight: bold;">Note: Words highlighted with a stronger color indicate that the model relies more heavily on those words to generate the given output. </div>
+            </div>
+            
+        </div>
+    </div>
+
+        <form method = "POST">
+            {% csrf_token %}
+            <h3> Do you think this is a correct prediction? </h3>
+            <button type="submit" name="btn_value" value="1" class="btn btn-primary btn-lg" style="margin-right:40px">Yes</button>
+            <button type="submit" name="btn_value" value="0" class="btn btn btn-danger btn-lg">No</button>
+        </form>
+    </p>
+
+    <p>
+      <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">Show/Hide Details
+      </a>
+    </p>
+    <div class="collapse" id="collapseExample">
+      <div class="card card-body">
+          <h4>Hardness: </h4> {{study_sample.hardness}}
+          <h4>SQL (Prediction): </h4> {{study_sample.pred_sql}}
+          <h4>SQL (Gold): </h4> {{study_sample.ground_sql}}
+          <h4>Correct Prediction: </h4> Yes
+      </div>
+    </div>
+
+{% endblock content %}

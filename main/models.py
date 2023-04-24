@@ -7,6 +7,9 @@ TRUST_LEVEL = (
     (2, 'High'),
   )
 
+class Hyperparameters(models.Model):
+    no_samples_per_user = models.IntegerField()
+
 class Spider_db(models.Model):
     db_name = models.CharField(max_length=100)
     db_schema = models.TextField()

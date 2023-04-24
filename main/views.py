@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .models import Samples, Study, db_test
+from .models import Samples, Study, db_test, Hyperparameters
 from .forms import StudyForm
 import random
 from django.http import HttpResponse
@@ -10,19 +10,23 @@ import pdb
 import ast
 from django.contrib.auth.decorators import login_required
 
+
 @login_required
 def home(request):
     not_responded_count = Study.objects.filter(user=request.user, viewed=False).count()
     all_count = Study.objects.all().count()
-    context = {'not_responded_count': not_responded_count, 'all_count': all_count}
+    correct_count = Study.objects.filter(user=request.user, user_response=True).count()
+    incorrect_count = Study.objects.filter(user=request.user, user_response=False).count()
+    context = {'not_responded_count': not_responded_count, 'all_count': all_count, "responded_count": all_count-not_responded_count, "correct_count": correct_count, "incorrect_count": incorrect_count}
     return render(request, 'main/home.html', context)
 
 @login_required
 def create_samples(request):
+    no_samples = Hyperparameters.objects.all().first().no_samples_per_user
     check_samples = Study.objects.filter(user=request.user)
     if len(check_samples) == 0:
         all_samples = Samples.objects.all()
-        random_sample = [all_samples[i] for i in sorted(random.sample(range(len(all_samples)), 2))]
+        random_sample = [all_samples[i] for i in sorted(random.sample(range(len(all_samples)), no_samples))]
         for each in random_sample:
             StudyInstance = Study(user=request.user, sample=each)
             StudyInstance.save()
