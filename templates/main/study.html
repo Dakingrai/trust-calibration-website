@@ -19,7 +19,7 @@
       <div class="card card-body">
         <div class="db_block">
           <b style="padding-bottom: 20px;"> Database name: {{study_sample.db_name}} </b>
-          <p></p>
+          <p><i>The database consists of {{study_sample.no_tables}} tables which are listed below, along with their respective sample records. Please note that due to limited space, not all records for all tables are displayed here, but there are additional ones in the database.</i></p>
           {% for table in study_sample.db %}
           <div class="card">
             <h6 class="card-header">

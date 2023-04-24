@@ -2,7 +2,6 @@
 {% block content %}
     <h2> Welcome {{user.username}}! </h2>
     <h5 style="margin-top: 30px; margin-bottom: 30px;"> You have responded to {{responded_count}} items out of {{all_count}} items. </h5>
-    
     {% if user.is_staff %}
     <a class="btn btn-primary" href="{% url 'create-samples' %}">Create Samples</a>
     <a class="btn btn-warning" href="{% url 'reset-study' %}">Reset User Study</a>
