@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def home(request):
     not_responded_count = Study.objects.filter(user=request.user, viewed=False).count()
-    all_count = Study.objects.all().count()
+    all_count = Study.objects.filter(user=request.user).count()
     n_correct_response = Study.objects.filter(user=request.user, user_response=True, sample__correct_prediction=True, viewed=True).count() + Study.objects.filter(user=request.user, user_response=False, sample__correct_prediction=False, viewed=True).count()
     context = {
         'not_responded_count': not_responded_count, 
@@ -55,7 +55,7 @@ def start_study(request):
 
 @login_required
 def study(request, pk):
-    study_sample = Study.objects.get(id=pk)
+    study_sample = Study.objects.get(id=pk, user=request.user)
     if request.method == 'POST':
         btn_value = bool(int(request.POST.get('btn_value')))
         if btn_value:
