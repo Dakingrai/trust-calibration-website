@@ -79,13 +79,12 @@ def study(request, pk):
     comp_exp = ast.literal_eval(study_sample.sample.comp_explanations)
     feature_attr = ast.literal_eval(study_sample.sample.feature_attribution)
     comp_conf = ast.literal_eval(study_sample.sample.comp_confidence)
-    sorted_ab = sorted(zip(comp_conf, comp_exp), reverse=True)
-    sorted_comp_conf, sorted_comp_exp = [list(t) for t in zip(*sorted_ab)]
-    sorted_ac = sorted(zip(comp_conf, feature_attr), reverse=True)
-    sorted_comp_conf, sorted_feature_attr = [list(t) for t in zip(*sorted_ac)]
+    # sorted_ab = sorted(zip(comp_conf, comp_exp), reverse=True)
+    # sorted_comp_conf, sorted_comp_exp = [list(t) for t in zip(*sorted_ab)]
+    # sorted_ac = sorted(zip(comp_conf, feature_attr), reverse=True)
+    # sorted_comp_conf, sorted_feature_attr = [list(t) for t in zip(*sorted_ac)]
     if len(comp_conf) > 1:
         mid_comp_conf = [max(comp_conf), min(comp_conf)]
-        
         if comp_conf.index(min(comp_conf)) != comp_conf.index(max(comp_conf)):
             mid_comp_exp = [comp_exp[comp_conf.index(max(comp_conf))], comp_exp[comp_conf.index(min(comp_conf))]]
             mid_feature_attr = [feature_attr[comp_conf.index(max(comp_conf))], feature_attr[comp_conf.index(min(comp_conf))]]
@@ -103,8 +102,9 @@ def study(request, pk):
         mid = False
         mid_desc = []
     question = study_sample.sample.question.split()
-    ques_and_feat_attr = [zip(question, each) for each in sorted_feature_attr]
+    ques_and_feat_attr = [zip(question, each) for each in feature_attr]
     ques_and_feat_attr_mid = [zip(question, each) for each in mid_feature_attr]
+    print(ques_and_feat_attr, comp_exp, comp_conf)
     context = {
         'db': final_context,
         'question': study_sample.sample.question,
