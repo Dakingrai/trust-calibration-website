@@ -10,46 +10,7 @@
     });
     </script>
 
-    <p style="margin-top:25px;">
-      <a class="btn btn-info" data-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample1">
-        View Database
-      </a>
-    </p>
-    <div class="collapse" id="collapseExample1">
-      <div class="card card-body">
-        <div class="db_block">
-          <b style="padding-bottom: 20px;"> Database name: {{study_sample.db_name}} </b>
-          <p><i>The database consists of {{study_sample.no_tables}} tables which are listed below, along with their respective sample records. Please note that due to limited space, not all records for tables are displayed here, but there are additional ones in the database.</i></p>
-          {% for table in study_sample.db %}
-          <div class="card">
-            <h6 class="card-header">
-              Table {{forloop.counter}}: {{ table.table_name }}
-            </h6>
-            <div class="card-body">
-              <table class="table table-sm table-hover">
-                <thead>
-                  <tr>
-                    {% for column in table.columns %}
-                      <th scope="col">{{ column }}</th>
-                    {% endfor %}
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for vals in table.values %}
-                    <tr>
-                      {% for v in vals %}
-                        <td>{{ v }}</td>
-                      {% endfor %}
-                    </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-            </div>
-          </div>
-          {% endfor %}
-      </div>
-      </div>
-    </div>
+    
 
     <!-- <div class="db_block">
         {% for table in study_sample.db %}
@@ -86,16 +47,31 @@
                   <h3>Question</h3>
                   <p>{{ study_sample.question }}</p>
               </div>
-          <h3>Returned Database Records </h3>
+          <h3>Model's Prediction </h3>
           <ol>
               {% for record in study_sample.db_records %}
-              <li>{{record}}</li>
+              <li>
+                {% for r in record %}
+                  {% if not forloop.last %}
+                    {{r}},
+                  {% else %}
+                    {{r}}
+                  {% endif %}
+                {% endfor %}
+              </li>
               {% endfor %}
           </ol>
       </div>
   </div>
 
-        
+  <form method = "POST">
+    {% csrf_token %}
+    <h3> Do you think this is a correct prediction? </h3>
+    <button type="submit" name="btn_value" value="1" class="btn btn-primary btn-lg" style="margin-right:40px">Yes</button>
+    <button type="submit" name="btn_value" value="0" class="btn btn btn-danger btn-lg" style="margin-right:40px">No</button>
+    <button type="submit" name="btn_value" value="2" class="btn btn btn-warning btn-lg">Ask the expert</button>
+  </form>
+</br>
 
       <div class="model_exp_block">
         <h3>Model Explanation </h3>
@@ -105,72 +81,219 @@
             <option value="high1" class="dropdown-item">High Transparency</option>
         </select>
         <div class="model_exp_body card card-body">
-            <div id="low1" class="my-div"><h5> The model has an overall confidence of {{study_sample.overall_conf}}% in making this prediction.</h5></div>
+            <div id="low1" class="my-div"><h5> The model has an overall confidence of 95.73% in making this prediction. ​</h5></div>
 
             <div id="high1" class="my-div" style="display: none">
-              <h5> The model has an overall confidence of {{study_sample.overall_conf}}% in making this prediction. In particular, </h5>
-              <ol>
-                {% for exp_high, exp1, conf in study_sample.feature_attr_high %}
-                <li>
-                    <p>The model is <b>{{conf}}%</b> confident about <b>{{ exp1 }}</b>. The prediction is made because of the following highlighted input: </p>
-                    <p>
-                    {% for ques1, e1 in exp_high %}
-                        <span class="highlight" style="background-color: rgba(255, 106, 0, {{e1}}); 
-                        padding: 0 3px;">{{ques1}}</span>
+              <h5> The model relied on the following steps/rules to generate the model’s predictions:  </h5>
+              <div class="card" style="background-color: rgba(245, 245, 245, 0.4); padding:10px; margin: 15px 0px;">
+                <p> <b>Step 1:</b> Sample records from cars_data table. Note: The records in the table are only sample records meant for explanation of rules. <a href="#view-database">Click here</a> to see the full database. (The model is highly confident (99.98%) about this step.)</p>
+                
+                <div class="card">
+                  <h6 class="card-header">
+                    Table: cars_data
+                  </h6>
+                  <div class="card-body">
+                    <table class="table table-sm table-hover">
+                      <thead>
+                        <tr>
+                            <th scope="col">id</th>
+                            <th scope="col">mpg</th>
+                            <th scope="col">cylinders</th>
+                            <th scope="col">weight</th>
+                            <th scope="col">accelerate</th>
+                            <th scope="col">year</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                          <tr>
+                              <td>1</td>
+                              <td>18.0</td>
+                              <td>8</td>
+                              <td>3504.0</td>
+                              <td>12.0</td>
+                              <td>1970</td>
+                          </tr>
+                          <tr>
+                              <td>2</td>
+                              <td>15.0</td>
+                              <td>8</td>
+                              <td>3693.0</td>
+                              <td>11.5</td>
+                              <td>1971</td>
+                          </tr>
+                          <tr>
+                              <td>3</td>
+                              <td>18.0</td>
+                              <td>8</td>
+                              <td>3436.0</td>
+                              <td>11.0</td>
+                              <td>1970</td>
+                          </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="f-att" style="margin-top: 20px;">
+                  <p> The model came up with this particular rule due to following highlighted words in question:​​ </p>
+                  <div>
+                    {% for exp, exp1, conf, mid_desc in study_sample.feature_attr_mid1 %}
+                          {% for ques1, e1 in exp %}
+                            <span style="background-color: rgba(255, 106, 0, {{e1}}); padding: 0px 3px;">{{ques1}}</span>
+                          {% endfor %}
                     {% endfor %}
-                    </p>
-                </li>
-                {% endfor %}
-              </ol>
-              <div style="background-color: #D5D5D5; padding: 5px 15px; margin-top: 10px; font-style: italic; font-weight: bold;">Note: Words highlighted with a stronger color indicate that the model relies more heavily on those words to generate the given output. </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="card" style="background-color: rgba(245, 245, 245, 0.4); padding:10px; margin: 15px 0px;">
+                <p> <b>Step 2:</b> Group the records with the same year. (The model is highly confident (100.00%) about this step.)​</p>
+                <div class="card card-body">
+                  <table class="table table-sm table-hover">
+                    <thead>
+                      <tr>
+                          <th scope="col">year</th>
+                          <th scope="col">id</th>
+                          <th scope="col">mpg</th>
+                          <th scope="col">cylinders</th>
+                          <th scope="col">weight</th>
+                          <th scope="col">accelerate</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>18.0</td>
+                            <td>8</td>
+                            <td>3504.0</td>
+                            <td>12.0</td>
+                            <td>1970</td>
+                        </tr>
+                        <tr>
+                          <td>3</td>
+                          <td>18.0</td>
+                          <td>8</td>
+                          <td>3436.0</td>
+                          <td>11.0</td>
+                          <td>1970</td>
+                      </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>15.0</td>
+                            <td>8</td>
+                            <td>3693.0</td>
+                            <td>11.5</td>
+                            <td>1971</td>
+                        </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="f-att" style="margin-top: 20px;">
+                  <p> The model came up with this particular rule due to following highlighted words in question:​​ </p>
+                  <div>
+                    {% for exp, exp1, conf, mid_desc in study_sample.feature_attr_mid2 %}
+                          {% for ques1, e1 in exp %}
+                            <span style="background-color: rgba(255, 106, 0, {{e1}}); padding: 0px 3px;">{{ques1}}</span>
+                          {% endfor %}
+                    {% endfor %}
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="card" style="background-color: rgba(245, 245, 245, 0.4); padding:10px; margin: 15px 0px;">
+                <p> <b>Step 3:</b> Choose the average value of weight and year. (The model is highly confident (99.98%) about this step.) ​</p>
+                <div class="card card-body">
+                  <table class="table table-sm table-hover">
+                    <thead>
+                      <tr>
+                          <th scope="col">Average of weight</th>
+                          <th scope="col">Year</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>3469.0</td>
+                            <td>1970</td>
+                        </tr>
+                        <tr>
+                            <td>3693.0</td>
+                            <td>1971</td>
+                        </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="f-att" style="margin-top: 20px;">
+                  <p> The model came up with this particular rule due to following highlighted words in question:​​ </p>
+                  <div>
+                    {% for exp3, exp1, conf, mid_desc in study_sample.feature_attr_mid3 %}
+                          {% for q3, e3 in exp3 %}
+                            <span class="highlight" style="background-color: rgba(255, 106, 0, {{e3}}); padding: 0px 3px;">{{q3}}</span>
+                          {% endfor %}
+                    {% endfor %}
+                  </div>
+
+                </div>
+              </div>
+                <div style="background-color: #D5D5D5; padding: 5px 15px; margin-top: 10px; font-style: italic; font-weight: bold;">Note: Words highlighted with a stronger color indicate that the model relies more heavily on those words to generate the given output. </div>
+
+                <div>
+                  <p style="margin-top:25px;" id="view-database">
+                    <a class="btn btn-info" data-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample1">
+                      View Database
+                    </a>
+                  </p>
+                </div>
             </div>
 
             <div id="mid1" class="my-div" style="display: none">
-              <h5> The model has an overall confidence of {{study_sample.overall_conf}}% in making this prediction. In particular, </h5>
-              <ol>
-                  {% for exp, exp1, conf, mid_desc in study_sample.feature_attr_mid %}
-                  <li>
-                      
-                        {% if mid %}
-                          {% for ques1, e1 in exp %}
-                          <p>The model is <b>{{mid_desc}}</b> confident ({{conf}}%) about <b>{{ exp1 }}</b>. The prediction is made because of the following highlighted input: </p>
-                            <span class="highlight" style="background-color: rgba(255, 106, 0, {{e1}}); 
-                          padding: 0 3px;">{{ques1}}</span>
-                          {% endfor %}
-                        {% else %}
-                        <p>The model is <b>{{mid_desc}}</b> confident ({{conf}}%) about <b>{{ exp1 }}</b>. The prediction is made because of the following highlighted input: </p>
-                          {% for ques1, e1 in exp %}
-                            <span class="highlight" style="background-color: rgba(255, 106, 0, {{e1}}); padding: 0px 3px;">{{ques1}}</span>
-                          {% endfor %}
-                        {% endif %}
-                      </p>
-                  </li>
-                  {% endfor %}
-                </ol>
+              <h5> The model came up with this prediction due to following highlighted words in question:​ </h5>
+              {% for exp3, exp1, conf, mid_desc in study_sample.feature_attr_mid %}
+                {% for q3, e3 in exp3 %}
+                  <span class="highlight" style="background-color: rgba(255, 106, 0, {{e3}}); padding: 0px 3px;">{{q3}}</span>
+                {% endfor %}
+              {% endfor %}
                 <div style="background-color: #D5D5D5; padding: 5px 15px; margin-top: 10px; font-style: italic; font-weight: bold;">Note: Words highlighted with a stronger color indicate that the model relies more heavily on those words to generate the given output. </div>
             </div>
             
         </div>
     </div>
 
-        <form method = "POST">
-            {% csrf_token %}
-            <h3> Do you think this is a correct prediction? </h3>
-            <button type="submit" name="btn_value" value="1" class="btn btn-primary btn-lg" style="margin-right:40px">Yes</button>
-            <button type="submit" name="btn_value" value="0" class="btn btn btn-danger btn-lg">No</button>
-        </form>
-    </p>
-
-    <p>
-      <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">Show/Hide Details
-      </a>
-    </p>
-    <div class="collapse" id="collapseExample">
+    
+    
+    <div class="collapse" id="collapseExample1">
       <div class="card card-body">
-          <h4>Hardness: </h4> {{study_sample.hardness}}
-          <h4>SQL (Prediction): </h4> {{study_sample.pred_sql}}
-          <h4>SQL (Gold): </h4> {{study_sample.ground_sql}}
-          <h4>Correct Prediction: </h4> Yes
+        <div class="db_block">
+          <b style="padding-bottom: 20px;"> Database name: {{study_sample.db_name}} </b>
+          <p><i>The database consists of {{study_sample.no_tables}} tables which are listed below, along with their respective sample records. Please note that due to limited space, not all records for tables are displayed here, but there are additional ones in the database.</i></p>
+          {% for table in study_sample.db %}
+          <div class="card">
+            <h6 class="card-header">
+              Table {{forloop.counter}}: {{ table.table_name }}
+            </h6>
+            <div class="card-body">
+              <table class="table table-sm table-hover">
+                <thead>
+                  <tr>
+                    {% for column in table.columns %}
+                      <th scope="col">{{ column }}</th>
+                    {% endfor %}
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for vals in table.values %}
+                    <tr>
+                      {% for v in vals %}
+                        <td>{{ v }}</td>
+                      {% endfor %}
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          {% endfor %}
+      </div>
       </div>
     </div>
 

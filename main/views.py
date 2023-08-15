@@ -9,7 +9,7 @@ from django.http import HttpResponse
 import pdb
 import ast
 from django.contrib.auth.decorators import login_required
-
+import copy
 
 @login_required
 def home(request):
@@ -110,7 +110,7 @@ def study(request, pk):
         'question': study_sample.sample.question,
         'db_records': ast.literal_eval(study_sample.sample.db_records),
         'comp_exp': comp_exp,
-        'feature_attr_mid': zip(ques_and_feat_attr_mid, mid_comp_exp, mid_comp_conf, mid_desc),
+        'feature_attr_mid': zip([ques_and_feat_attr_mid[0]], [mid_comp_exp[0]], [mid_comp_conf[0]], [mid_desc[0]]), # To be changed
         'feature_attr_high': zip(ques_and_feat_attr, comp_exp, comp_conf),
         'overall_conf': study_sample.sample.confidence,
         'hardness': study_sample.sample.hardness,
@@ -118,6 +118,10 @@ def study(request, pk):
         'ground_sql': study_sample.sample.ground_sql,
         "no_tables": len(final_context),
         "db_name": db_name,
+
+        'feature_attr_mid1': copy.deepcopy(zip([ques_and_feat_attr_mid[0]], [mid_comp_exp[0]], [mid_comp_conf[0]], [mid_desc[0]])), # To be changed
+        'feature_attr_mid2': copy.deepcopy(zip([ques_and_feat_attr_mid[0]], [mid_comp_exp[0]], [mid_comp_conf[0]], [mid_desc[0]])), # To be changed
+        'feature_attr_mid3': copy.deepcopy(zip([ques_and_feat_attr_mid[0]], [mid_comp_exp[0]], [mid_comp_conf[0]], [mid_desc[0]])), # To be changed
     }
     return render(request, 'main/study.html', {'study_sample': context})
 
