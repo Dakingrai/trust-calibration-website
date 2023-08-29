@@ -2,14 +2,15 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .models import Samples, Study, db_test, Hyperparameters
+from .models import Samples, Study, db_test, Hyperparameters, SqlExplanation, Spider_db
 from .forms import StudyForm
 import random
 from django.http import HttpResponse
 import pdb
 import ast
 from django.contrib.auth.decorators import login_required
-import copy
+import copy, json
+from django.utils import timezone
 
 @login_required
 def home(request):
@@ -53,6 +54,28 @@ def start_study(request):
         messages.success(request, f'You have completed the study!')
         return redirect(reverse('home'))
 
+
+def convert_string_to_list_of_list(input_string):
+    inner_list_strings = input_string.strip("[]").split("], [")
+    list_of_lists = [list(map(str, inner_list.split(", "))) for inner_list in inner_list_strings]
+    return list_of_lists
+
+def convert_str_to_list_depth3(input_string):
+    # Step 1: Parse the string to extract inner list of list strings
+    inner_list_of_list_strings = input_string.strip("[]").split("], [")
+
+    # Step 2: Convert inner list of list strings to actual lists of lists
+    list_of_list_of_lists = []
+    for inner_list_of_list_string in inner_list_of_list_strings:
+        inner_lists = inner_list_of_list_string.split("], [")
+        inner_list_of_list = []
+        for inner_list in inner_lists:
+            inner_list_of_list.append(list(map(str, inner_list.split(", "))))
+        list_of_list_of_lists.append(inner_list_of_list)
+    
+    return list_of_list_of_lists
+
+
 @login_required
 def study(request, pk):
     study_sample = Study.objects.get(id=pk, user=request.user)
@@ -66,6 +89,10 @@ def study(request, pk):
         study_sample.save()
         return redirect(reverse('start-study'))
     
+    question = study_sample.sample.question.split()
+    feature_attr = ast.literal_eval(study_sample.sample.feature_attribution)
+    ques_and_feat_attr = [(q, f) for q, f in zip(question, feature_attr)]
+    # comp = [(db, feat, conf) for db, feat, conf in zip(comp_exp, comp_feature_attr, comp_conf)]
     db_name = study_sample.sample.database_name
     all_db_schema = db_test.objects.all().first().all_db
     all_db_schema = ast.literal_eval(all_db_schema)
@@ -76,52 +103,94 @@ def study(request, pk):
                               'columns': [c.strip() for c in each['columns'].strip().split(",")],
                               'values': ast.literal_eval(each['records'])
                               })
-    comp_exp = ast.literal_eval(study_sample.sample.comp_explanations)
-    feature_attr = ast.literal_eval(study_sample.sample.feature_attribution)
-    comp_conf = ast.literal_eval(study_sample.sample.comp_confidence)
-    # sorted_ab = sorted(zip(comp_conf, comp_exp), reverse=True)
-    # sorted_comp_conf, sorted_comp_exp = [list(t) for t in zip(*sorted_ab)]
-    # sorted_ac = sorted(zip(comp_conf, feature_attr), reverse=True)
-    # sorted_comp_conf, sorted_feature_attr = [list(t) for t in zip(*sorted_ac)]
-    if len(comp_conf) > 1:
-        mid_comp_conf = [max(comp_conf), min(comp_conf)]
-        if comp_conf.index(min(comp_conf)) != comp_conf.index(max(comp_conf)):
-            mid_comp_exp = [comp_exp[comp_conf.index(max(comp_conf))], comp_exp[comp_conf.index(min(comp_conf))]]
-            mid_feature_attr = [feature_attr[comp_conf.index(max(comp_conf))], feature_attr[comp_conf.index(min(comp_conf))]]
-            mid = True
-            mid_desc = ["most", "least"]
-        else:
-            mid_comp_exp = [comp_exp[comp_conf.index(max(comp_conf))], comp_exp[comp_conf.index(min(comp_conf))+1]]
-            mid_feature_attr = [feature_attr[comp_conf.index(max(comp_conf))], feature_attr[comp_conf.index(min(comp_conf))+1]]
-            mid = True
-            mid_desc = ["most", "least"]
-    else:
-        mid_comp_conf = comp_conf
-        mid_comp_exp = comp_exp
-        mid_feature_attr = feature_attr
-        mid = False
-        mid_desc = []
-    question = study_sample.sample.question.split()
-    ques_and_feat_attr = [zip(question, each) for each in feature_attr]
-    ques_and_feat_attr_mid = [zip(question, each) for each in mid_feature_attr]
-    print(ques_and_feat_attr, comp_exp, comp_conf)
+    
+    sample_name = study_sample.sample.sample_name
+    components = SqlExplanation.objects.filter(sample=sample_name).order_by('step')
+    comp_exp = [each.explanation for each in components]
+    comp_feature_attr = [ast.literal_eval(each.feature_attribution) for each in components]
+    comp_conf = [each.confidence for each in components]
+    comp_db_name = [each.database_name for each in components]
+    comp_dbs = []
+    tables = []
+    component_context = []
+    for idx, each in enumerate(comp_db_name):
+        step_context = []
+        each_db = Spider_db.objects.filter(db_name=each).first()
+        # all = ast.literal_eval(each_db.all_dbs)
+        # pdb.set_trace()
+        table_names = each_db.table_names.split(",")
+        column_names = each_db.column_names
+        column_names = convert_string_to_list_of_list(column_names)
+        values = each_db.db_values
+        values = values.split("|")
+        final_values = []
+        for each in values:
+            final_values.append(convert_string_to_list_of_list(each))
+        # values = convert_str_to_list_depth3(values)
+        # try:
+        #     assert len(column_names) == len(final_values)
+        # except:
+        #     pdb.set_trace()
+        for i, each in enumerate(table_names):
+            step_context.append({'table_name': each,
+                                 'columns': column_names[i],
+                                 'values': final_values[i],
+                                 })
+        component_context.append(step_context)
+
+    assert len(comp_exp) == len(comp_feature_attr) == len(comp_conf) == len(component_context)
+    full_component_data = []
+    for i, each in enumerate(comp_exp):
+        ques_and_feat_attr1 = [(q, f) for q, f in zip(question, comp_feature_attr[i])]
+        full_component_data.append((comp_exp[i], ques_and_feat_attr1, comp_conf[i], component_context[i]))
+    # pdb.set_trace()
+    # full_component_data = zip(comp_exp, comp_feature_attr, comp_conf, comp_db_name, component_context)
+        # column_names = [ast.literal_eval(c) for c in column_names.split("|")]
+        # each_values = ast.literal_eval(each_db.db_values)
+
+        
+    # comp_exp = ast.literal_eval(study_sample.sample.comp_explanations)
+    # feature_attr = ast.literal_eval(study_sample.sample.feature_attribution)
+    # comp_conf = ast.literal_eval(study_sample.sample.comp_confidence)
+    # if len(comp_conf) > 1:
+    #     mid_comp_conf = [max(comp_conf), min(comp_conf)]
+    #     if comp_conf.index(min(comp_conf)) != comp_conf.index(max(comp_conf)):
+    #         mid_comp_exp = [comp_exp[comp_conf.index(max(comp_conf))], comp_exp[comp_conf.index(min(comp_conf))]]
+    #         mid_feature_attr = [feature_attr[comp_conf.index(max(comp_conf))], feature_attr[comp_conf.index(min(comp_conf))]]
+    #         mid = True
+    #         mid_desc = ["most", "least"]
+    #     else:
+    #         mid_comp_exp = [comp_exp[comp_conf.index(max(comp_conf))], comp_exp[comp_conf.index(min(comp_conf))+1]]
+    #         mid_feature_attr = [feature_attr[comp_conf.index(max(comp_conf))], feature_attr[comp_conf.index(min(comp_conf))+1]]
+    #         mid = True
+    #         mid_desc = ["most", "least"]
+    # else:
+    #     mid_comp_conf = comp_conf
+    #     mid_comp_exp = comp_exp
+    #     mid_feature_attr = feature_attr
+    #     mid = False
+    #     mid_desc = []
+    
+    # ques_and_feat_attr_mid = [zip(question, each) for each in mid_feature_attr]
+    # print(ques_and_feat_attr, comp_exp, comp_conf)
     context = {
         'db': final_context,
         'question': study_sample.sample.question,
         'db_records': ast.literal_eval(study_sample.sample.db_records),
-        'comp_exp': comp_exp,
-        'feature_attr_mid': zip([ques_and_feat_attr_mid[0]], [mid_comp_exp[0]], [mid_comp_conf[0]], [mid_desc[0]]), # To be changed
-        'feature_attr_high': zip(ques_and_feat_attr, comp_exp, comp_conf),
         'overall_conf': study_sample.sample.confidence,
         'hardness': study_sample.sample.hardness,
         'pred_sql': study_sample.sample.pred_sql,
         'ground_sql': study_sample.sample.ground_sql,
         "no_tables": len(final_context),
         "db_name": db_name,
+        'ques_and_feat_attr': ques_and_feat_attr,
+        'comp_feature_attr': comp_feature_attr,
+        'comp_conf': comp_conf,
+        'comp_exp': comp_exp,
+        'full_comp_data': full_component_data,
 
-        'feature_attr_mid1': copy.deepcopy(zip([ques_and_feat_attr_mid[0]], [mid_comp_exp[0]], [mid_comp_conf[0]], [mid_desc[0]])), # To be changed
-        'feature_attr_mid2': copy.deepcopy(zip([ques_and_feat_attr_mid[0]], [mid_comp_exp[0]], [mid_comp_conf[0]], [mid_desc[0]])), # To be changed
-        'feature_attr_mid3': copy.deepcopy(zip([ques_and_feat_attr_mid[0]], [mid_comp_exp[0]], [mid_comp_conf[0]], [mid_desc[0]])), # To be changed
     }
+    Study.objects.filter(id=pk, user=request.user).update(start_time= timezone.now()) # update start time
+
     return render(request, 'main/study.html', {'study_sample': context})
 

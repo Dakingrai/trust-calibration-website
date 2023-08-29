@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Study, Samples, Spider_db, db_test, Hyperparameters
+from .models import Study, Samples, Spider_db, db_test, Hyperparameters, SqlExplanation
 from django.urls import path
 from django.shortcuts import render
 from django import forms
@@ -13,13 +13,13 @@ class JsonUploadForm(forms.Form):
     json_file = forms.FileField()
 
 class StudyAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'sample', 'user_response', 'viewed')
+    list_display = ('id', 'user', 'sample', 'user_response', 'viewed', 'created', 'updated', 'start_time')
     list_filter = ['user']
     save_on_top = True
     list_editable = ['viewed', 'user_response']
     
 class SamplesAdmin(admin.ModelAdmin):
-    list_display = ('id', 'question', 'database_name', "hardness", "correct_prediction")
+    list_display = ('sample_name', 'question', 'database_name', "hardness", "correct_prediction")
     list_filter = ['database_name', "hardness", "correct_prediction"]
     save_on_top = True
 
@@ -39,17 +39,13 @@ class SamplesAdmin(admin.ModelAdmin):
             for each in parsed_data:
                 created = Samples.objects.update_or_create(
                     question=each['question'],
-                    ground_editsql=each['ground_editsql'],
-                    pred_editsql=each['pred_editsql'],
                     ground_sql=each['ground_sql'],
                     pred_sql=each['pred_sql'],
                     hardness=each['hardness'],
                     db_records=each['db_records'],
                     components=each['components'],
-                    comp_explanations=each['comp_explanations'],
                     feature_attribution=each['feature_attribution'],
                     confidence=each['confidence'],
-                    comp_confidence=each['comp_confidence'],
                     correct_prediction=each['correct_prediction'],
                     database_name=each['database_name'],
                 )
@@ -64,4 +60,6 @@ admin.site.register(Study, StudyAdmin)
 admin.site.register(Spider_db)
 admin.site.register(db_test)
 admin.site.register(Hyperparameters)
+admin.site.register(SqlExplanation)
+admin.site.site_header = "Trust Calibration Admin"
 
