@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .models import Samples, Study, db_test, Hyperparameters, SqlExplanation, Spider_db
+from .models import Samples, Study, db_test, Hyperparameters, SqlExplanation, Spider_db, UserTransaprency
 from .forms import StudyForm
 import random
 from django.http import HttpResponse
@@ -11,6 +11,8 @@ import ast
 from django.contrib.auth.decorators import login_required
 import copy, json
 from django.utils import timezone
+import random
+
 
 @login_required
 def home(request):
@@ -25,13 +27,16 @@ def home(request):
         }
     return render(request, 'main/home.html', context)
 
+
 @login_required
-def create_samples(request):
+def create_study(request):
     no_samples = Hyperparameters.objects.all().first().no_samples_per_user
     check_samples = Study.objects.filter(user=request.user)
     if len(check_samples) == 0:
         all_samples = Samples.objects.all()
-        random_sample = [all_samples[i] for i in sorted(random.sample(range(len(all_samples)), no_samples))]
+        # random_sample = [all_samples[i] for i in sorted(random.sample(range(len(all_samples)), no_samples))] 
+        random_sample = [all_samples[i] for i in sorted(random.sample(range(len(all_samples)), no_samples))] 
+        random.shuffle(random_sample)
         for each in random_sample:
             StudyInstance = Study(user=request.user, sample=each)
             StudyInstance.save()
@@ -39,6 +44,19 @@ def create_samples(request):
     else:
         messages.error(request, f'You already have samples!')
     return redirect(reverse('home'))
+
+
+def delete_study(request):
+    Study.objects.filter(user=request.user).delete()
+    return redirect(reverse('home'))
+
+
+def generate_report(request):
+    context = {
+        "test": "This is test"
+    }
+    return render(request, 'main/report.html', {'data': context})
+
 
 def reset_study(request):
     Study.objects.filter(user=request.user).update(viewed=False)
@@ -59,6 +77,7 @@ def convert_string_to_list_of_list(input_string):
     inner_list_strings = input_string.strip("[]").split("], [")
     list_of_lists = [list(map(str, inner_list.split(", "))) for inner_list in inner_list_strings]
     return list_of_lists
+
 
 def convert_str_to_list_depth3(input_string):
     # Step 1: Parse the string to extract inner list of list strings
@@ -88,7 +107,18 @@ def study(request, pk):
         study_sample.viewed = True
         study_sample.save()
         return redirect(reverse('start-study'))
-    
+    # pdb.set_trace()
+    try:
+        prev_sample = Study.objects.filter(id__lt=pk, user=request.user, viewed=True).order_by('-id').first()
+        if prev_sample.user_response == prev_sample.sample.correct_prediction:
+            prev_sample_correct = "Yes"
+        else:
+            prev_sample_correct = "No"
+        prev_sample = "Yes"
+    except:
+        prev_sample = "None"
+        prev_sample_correct = "None"
+    # pdb.set_trace()
     question = study_sample.sample.question.split()
     feature_attr = ast.literal_eval(study_sample.sample.feature_attribution)
     ques_and_feat_attr = [(q, f) for q, f in zip(question, feature_attr)]
@@ -173,6 +203,8 @@ def study(request, pk):
     
     # ques_and_feat_attr_mid = [zip(question, each) for each in mid_feature_attr]
     # print(ques_and_feat_attr, comp_exp, comp_conf)
+    username = request.user.username
+    user_transparency = UserTransaprency.objects.filter(username = username).first()
     context = {
         'db': final_context,
         'question': study_sample.sample.question,
@@ -188,6 +220,9 @@ def study(request, pk):
         'comp_conf': comp_conf,
         'comp_exp': comp_exp,
         'full_comp_data': full_component_data,
+        'transparency': user_transparency.user_transparency,
+        'prev_sample': prev_sample,
+        'prev_sample_correct': prev_sample_correct,
 
     }
     Study.objects.filter(id=pk, user=request.user).update(start_time= timezone.now()) # update start time

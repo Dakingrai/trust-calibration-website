@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Study, Samples, Spider_db, db_test, Hyperparameters, SqlExplanation
+from .models import Study, Samples, Spider_db, db_test, Hyperparameters, SqlExplanation, UserTransaprency
 from django.urls import path
 from django.shortcuts import render
 from django import forms
@@ -61,5 +61,6 @@ admin.site.register(Spider_db)
 admin.site.register(db_test)
 admin.site.register(Hyperparameters)
 admin.site.register(SqlExplanation)
+admin.site.register(UserTransaprency)
 admin.site.site_header = "Trust Calibration Admin"
 

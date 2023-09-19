@@ -74,3 +74,8 @@ class SqlExplanation(models.Model):
 
     def __str__(self):
         return self.database_name
+    
+class UserTransaprency(models.Model):
+    username = models.CharField(max_length=100, blank=True, null=True)
+    user_transparency = models.CharField(max_length=100, default="Low")
+

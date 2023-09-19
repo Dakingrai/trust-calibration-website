@@ -6,6 +6,8 @@
     {% if user.is_staff %}
     <a class="btn btn-primary" href="{% url 'create-samples' %}">Create Samples</a>
     <a class="btn btn-warning" href="{% url 'reset-study' %}">Reset User Study</a>
+    <a class="btn btn-warning" href="{% url 'delete-study' %}" onclick="return confirm('Are you sure?')"> Delete User Study</a>
+    <a class="btn btn-success" href="{% url 'generate-report' %}">Generate report</a>
     {% endif %}
     <a class="btn btn-info" href="{% url 'start-study' %}">Start User Study</a>
 {% endblock content %}

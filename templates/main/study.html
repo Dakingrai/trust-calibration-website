@@ -1,6 +1,7 @@
 {% extends "main/base.html" %}
 {% block content %}
-    <script>
+
+    <!-- <script>
       $(document).ready(function() {
       $('#my-dropdown').change(function() {
         var selectedDiv = $(this).val();
@@ -8,7 +9,7 @@
         $('#' + selectedDiv).show();
       });
     });
-    </script>
+    </script> -->
 
     
 
@@ -41,6 +42,14 @@
         </div>
         {% endfor %}
     </div> -->
+    {% if study_sample.prev_sample == "Yes" %}
+    {% if study_sample.prev_sample_correct == "Yes" %}
+    <div class="d-flex p-2 bd-highlight" style="background: lightgreen; padding: 20px !important; margin-top: 10px;">You've made CORRECT prediction in previous example! </div>
+    {% else %}
+    <div class="d-flex p-2 bd-highlight" style="background: indianred; padding: 20px !important; margin-top: 10px;">You've made INCORRECT prediction in previous example!</div>
+    {% endif %}
+    {% endif %}
+    
     <div>
       <p style="margin-top:25px;" id="view-database">
         <a class="btn btn-info" data-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample1">
@@ -109,18 +118,19 @@
       </div>
   </div>
 
-
       <div class="model_exp_block">
         <h3>Model Explanation </h3>
-        <select id="my-dropdown" >
+        <!-- <select id="my-dropdown" >
             <option value="low1" class="dropdown-item">Low Transparency</option>
             <option value="mid1" class="dropdown-item">Mid Transparency</option>
             <option value="high1" class="dropdown-item">High Transparency</option>
-        </select>
+        </select> -->
         <div class="model_exp_body card card-body">
+          {% if study_sample.transparency == "Low" %}
             <div id="low1" class="my-div"><h5> The model has an overall confidence of {{study_sample.overall_conf}}% in making this prediction. ​</h5></div>
-
-            <div id="high1" class="my-div" style="display: none">
+          {% endif %}
+          {% if study_sample.transparency == "High" %}
+            <div id="high1" class="my-div" >
               <h5> The model relied on the following steps/rules to generate the model’s predictions:  </h5>
               {% for comp_exp, comp_feature_attr, comp_conf, component_context in study_sample.full_comp_data%}
                 <div class="card" style="background-color: rgba(245, 245, 245, 0.4); padding:10px; margin: 15px 0px;">
@@ -172,6 +182,7 @@
                 
               {% endfor %}
             </div>
+            {% endif %}
             <div id="high11" class="my-div" style="display: none">
               <h5> The model relied on the following steps/rules to generate the model’s predictions:  </h5>
               <div class="card" style="background-color: rgba(245, 245, 245, 0.4); padding:10px; margin: 15px 0px;">
@@ -326,14 +337,15 @@
               </div>
                 <div style="background-color: #D5D5D5; padding: 5px 15px; margin-top: 10px; font-style: italic; font-weight: bold;">Note: Words highlighted with a stronger color indicate that the model relies more heavily on those words to generate the given output. </div>
             </div>
-
-            <div id="mid1" class="my-div" style="display: none">
+            {% if study_sample.transparency == "Medium" %}
+            <div id="mid1" class="my-div">
               <h5> The model came up with this prediction due to following highlighted words in question:​ </h5>
               {% for ques, feat in study_sample.ques_and_feat_attr %}
                   <span class="highlight" style="background-color: rgba(255, 106, 0, {{feat}}); padding: 0px 3px;">{{ques}}</span>
               {% endfor %}
                 <div style="background-color: #D5D5D5; padding: 5px 15px; margin-top: 10px; font-style: italic; font-weight: bold;">Note: Words highlighted with a stronger color indicate that the model relies more heavily on those words to generate the given output. </div>
             </div>
+            {% endif %}
             
         </div>
     </div>
@@ -341,8 +353,8 @@
     <form method = "POST">
       {% csrf_token %}
       <h3> Do you think this is a correct prediction? </h3>
-      <button type="submit" name="btn_value" value="1" class="btn btn-primary btn-lg" style="margin-right:40px">Yes</button>
-      <button type="submit" name="btn_value" value="0" class="btn btn btn-danger btn-lg" style="margin-right:40px">No</button>
+      <button type="submit" name="btn_value" id="submited" value="1" class="btn btn-primary btn-lg" style="margin-right:40px">Yes</button>
+      <button type="submit" name="btn_value" id="submited" value="0" class="btn btn btn-danger btn-lg" style="margin-right:40px">No</button>
       <!-- <button type="submit" name="btn_value" value="2" class="btn btn btn-warning btn-lg">Ask the expert</button> -->
     </form>
   </br>
