@@ -1,8 +1,8 @@
 {% extends "main/base.html" %}
 {% block content %}
     <h2> Welcome {{user.username}}! </h2>
-    <h5 style="margin-top: 30px; margin-bottom: 30px;"> You have responded to {{responded_count}} items out of {{all_count}} items. </h5>
-    <p> Out of {{responded_count}}, you've made {{n_correct_response}} correct response. </p>
+    <h5 style="margin-top: 30px; margin-bottom: 30px;"> You have responded to {{responded_count}} items out of {{all_count}} study items. </h5>
+    <h5 style="margin-top: 30px; margin-bottom: 30px;"> You have responded to {{train_responded}} training items out of {{training_count}} training items. </h5>
         {% if user.is_staff %}
         <a class="btn btn-primary" href="{% url 'create-samples' %}">Create Samples</a>
         <a class="btn btn-warning" href="{% url 'reset-study' %}">Reset User Study</a>

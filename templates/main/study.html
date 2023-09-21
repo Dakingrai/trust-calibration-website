@@ -366,18 +366,18 @@
     </div>
 
     <h3> Do you think this is a correct prediction? </h3>
-    <div class="correct-prediction" style="display: None; background: lightgreen; padding: 10px;">Yes, you've made correct prediction!</div>
-    <div class="incorrect-prediction" style="display: None; background: indianred; padding: 10px;">No, you've made incorrect prediction!</div>
-    
-    <form id="submitForm">
-      <button name="btn_value" id="yesButton" value="1" class="btn btn-primary btn-lg" style="margin-right:40px">Yes</button>
-      <button name="btn_value" id="noButton" value="0" class="btn btn btn-danger btn-lg" style="margin-right:40px">No</button>
-    </form>
-    
-    <form method = "POST">
-      {% csrf_token %}
-      <button type="submit" name="btn_value" id="my_submit" class="btn btn btn-warning btn-lg" style="display: None;"> Next Example </button>
-    </form>
-  </br>
+    <div class="correct-prediction" style="display: None; background: lightgreen; padding: 10px; margin-top: 10px; margin-bottom: 10px;"> Yes, you've made a correct prediction!</div>
+    <div class="incorrect-prediction" style="display: None; background: indianred; padding: 10px; margin-top: 10px; margin-bottom: 10px;"> No, you've made an incorrect prediction!</div>
+
+    <div style="display:flex; align-items: center; margin-top: 10px; margin-bottom: 30px;">
+        <form id="submitForm">
+          <button name="btn_value" id="yesButton" value="1" class="btn btn-primary btn-lg" style="margin-right:40px">Yes</button>
+          <button name="btn_value" id="noButton" value="0" class="btn btn btn-danger btn-lg" style="margin-right:40px">No</button>
+        </form>
+        <form method = "POST">
+          {% csrf_token %}
+          <button type="submit" name="btn_value" id="my_submit" class="btn btn btn-warning btn-lg" style="display: None;"> Next Example </button>
+        </form>
+    </div>
 
 {% endblock content %}

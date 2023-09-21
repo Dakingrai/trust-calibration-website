@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .models import Samples, Study, TrainingStudy, db_test, Hyperparameters, SqlExplanation, Spider_db, UserTransaprency
+from .models import Samples, Study, TrainingStudy, TrainingSamples, db_test, Hyperparameters, SqlExplanation, Spider_db, UserTransaprency
 from .forms import StudyForm
 import random
 from django.http import HttpResponse
@@ -16,14 +16,18 @@ import random
 
 @login_required
 def home(request):
-    not_responded_count = Study.objects.filter(user=request.user, viewed=False).count()
     all_count = Study.objects.filter(user=request.user).count()
+    training_count = TrainingStudy.objects.filter(user=request.user).count()
+    not_responded_train_count = TrainingStudy.objects.filter(user=request.user, viewed=True).count()
+    not_responded_count = Study.objects.filter(user=request.user, viewed=False).count()
     n_correct_response = Study.objects.filter(user=request.user, user_response=True, sample__correct_prediction=True, viewed=True).count() + Study.objects.filter(user=request.user, user_response=False, sample__correct_prediction=False, viewed=True).count()
     context = {
         'not_responded_count': not_responded_count, 
         'all_count': all_count, 
         "responded_count": all_count-not_responded_count,
         "n_correct_response": n_correct_response,
+        'training_count': training_count,
+        'train_responded': not_responded_train_count
         }
     return render(request, 'main/home.html', context)
 
@@ -394,11 +398,24 @@ def delete_training_samples(request):
 @login_required
 def reset_training_study(request):
     TrainingStudy.objects.filter(user=request.user).update(viewed=False)
-    messages.success(request, f'Your study has been reset!')
+    messages.success(request, f'Your training has been reset!')
     return redirect(reverse('home'))
 
 
 @login_required
 def create_training_samples(request):
-    pass
+    check_samples = TrainingStudy.objects.filter(user=request.user)
+    if len(check_samples) == 0:
+        all_samples = TrainingSamples.objects.all()
+        # random_sample = [all_samples[i] for i in sorted(random.sample(range(len(all_samples)), no_samples))] 
+        random_sample = [all_samples[i] for i in sorted(range(len(all_samples)))] 
+        random.shuffle(random_sample)
+        for each in random_sample:
+            StudyInstance = TrainingStudy(user=request.user, sample=each)
+            StudyInstance.save()
+        messages.success(request, f'Your training samples have been created!')
+    else:
+        messages.error(request, f'You already have training samples!')
+    
+    return redirect(reverse('home'))
 
