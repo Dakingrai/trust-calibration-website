@@ -3,11 +3,19 @@
     <h2> Welcome {{user.username}}! </h2>
     <h5 style="margin-top: 30px; margin-bottom: 30px;"> You have responded to {{responded_count}} items out of {{all_count}} items. </h5>
     <p> Out of {{responded_count}}, you've made {{n_correct_response}} correct response. </p>
-    {% if user.is_staff %}
-    <a class="btn btn-primary" href="{% url 'create-samples' %}">Create Samples</a>
-    <a class="btn btn-warning" href="{% url 'reset-study' %}">Reset User Study</a>
-    <a class="btn btn-warning" href="{% url 'delete-study' %}" onclick="return confirm('Are you sure?')"> Delete User Study</a>
-    <a class="btn btn-success" href="{% url 'generate-report' %}">Generate report</a>
-    {% endif %}
+        {% if user.is_staff %}
+        <a class="btn btn-primary" href="{% url 'create-samples' %}">Create Samples</a>
+        <a class="btn btn-warning" href="{% url 'reset-study' %}">Reset User Study</a>
+        <a class="btn btn-warning" href="{% url 'delete-study' %}" onclick="return confirm('Are you sure?')"> Delete User Study</a>
+        <a class="btn btn-success" href="{% url 'generate-report' %}">Generate report</a>
+        {% endif %}
     <a class="btn btn-info" href="{% url 'start-study' %}">Start User Study</a>
+    <p style="margin-top: 20px;">
+        {% if user.is_staff %}
+        <a class="btn btn-primary" href="{% url 'create-training-samples' %}">Create Training Samples</a>
+        <a class="btn btn-primary" href="{% url 'reset-training-study' %}">Reset Training Samples</a>
+        <a class="btn btn-primary" href="{% url 'delete-training-samples' %}">Delete Training Samples</a>
+        {% endif %}
+        <a class="btn btn-info" href="{% url 'start-training-study' %}">Start Training</a>
+    </p>
 {% endblock content %}

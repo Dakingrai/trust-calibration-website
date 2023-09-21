@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+  const submitForm = document.getElementById("submited1");
+  const submitButton = document.getElementById("my_submit");
+  const yesButton = document.getElementById("yesButton");
+  const noButton = document.getElementById("noButton");
+  submitForm.addEventListener("click", async (ev) => {
+    ev.preventDefault();
+    var val = 0;
+    var val = $(document.activeElement).val();
+    console.log("First Name="+ val);
+    submitButton.value = val;
+    $('#my_submit').show();
+    $("#yesButton").prop("disabled",true);
+    $("#noButton").hide();
+  }); 
+});
+
+</script>
+</head>
+<body>
+
+<!-- <p class="submitted1" style="display:None" > Correct..................### </p>
+<p class="submitted2" style="display:None"> Incorrect </p> -->
+
+<form method = "POST" id="submited1">
+    {% csrf_token %}
+      <h3> Do you think this is a correct prediction? </h3>
+      <button  name="btn_value" value="1" id="yesButton" class="btn btn-primary btn-lg" style="margin-right:40px">Yes</button>
+      <button  name="btn_value"  value="0" id="noButton" class="btn btn btn-danger btn-lg" style="margin-right:40px">No</button>
+      <button type="submit" name="btn_value" id="my_submit" class="btn next_example" style="margin-right: 40px; display: none;">Next Example</button>
+    </form>
+
+</body>
+</html>

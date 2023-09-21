@@ -9,4 +9,9 @@ urlpatterns = [
     path('delete-study/', views.delete_study, name="delete-study"),
     path('generate-report', views.generate_report, name="generate-report"),
     path('study/<int:pk>/ ', views.study, name="study"),
+    path('create-training-samples/', views.create_training_samples, name="create-training-samples"),
+    path('reset-training-study/', views.reset_training_study, name="reset-training-study"),
+    path('delete-training-samples/', views.delete_training_samples, name="delete-training-samples"),
+    path('start-training-study/', views.start_training_study, name="start-training-study"),
+    path('training-study/<int:pk>/ ', views.trainining_study, name="training-study"),
 ]
