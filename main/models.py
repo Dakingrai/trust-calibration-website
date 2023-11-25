@@ -11,6 +11,7 @@ TRUST_LEVEL = (
 
 class Hyperparameters(models.Model):
     no_samples_per_user = models.IntegerField()
+    agreement_text = models.TextField(blank=True, null=True)
 
 
 class Spider_db(models.Model):
@@ -113,4 +114,67 @@ class SqlExplanation(models.Model):
 class UserTransaprency(models.Model):
     username = models.CharField(max_length=100, blank=True, null=True)
     user_transparency = models.CharField(max_length=100, default="Low")
+
+class UserAgreement(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_agreement_status = models.BooleanField(default=False)
+    user_agreement_time = models.DateTimeField(blank=True, null=True)
+    user_agreement = models.TextField(blank=True, null=True)
+
+class UserTrust(models.Model):
+    TRUST_LEVEL = (
+        (1, 'Strongly disagree'),
+        (2, 'Somewhat disagree'),
+        (3, 'Neither agree or disagree'),
+        (4, 'Somewhat agree'),
+        (5, 'Strongly agree'),
+      )
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    trust_until_no_reason = models.IntegerField(choices=TRUST_LEVEL, default=3)
+    most_part_i_distrust = models.IntegerField(choices=TRUST_LEVEL, default=3)
+    rely_on_machine_assist = models.IntegerField(choices=TRUST_LEVEL, default=3)
+    tendency_to_trust = models.IntegerField(choices=TRUST_LEVEL, default=3)
+    easy_for_me_to_trust = models.IntegerField(choices=TRUST_LEVEL, default=3)
+    likely_to_trust = models.IntegerField(choices=TRUST_LEVEL, default=3)
+    user_trust_status = models.BooleanField(default=False)
+
+
+class UserDemographic(models.Model):
+    GENDER = [
+        ("M", "Male"),
+        ("F", "Female"),
+        ("O", "Others"),
+    ]
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100, blank=True, null=True)
+    age = models.IntegerField(blank=True, null=True)
+    gender = models.CharField(max_length=100, blank=True, null=True, choices=GENDER)
+
+class JianTrustScale(models.Model):
+    JIAN_LEVEL = (
+        (1, 'one'),
+        (2, 'two'),
+        (3, 'three'),
+        (4, 'four'),
+        (5, 'five'),
+        (6, 'six'),
+        (7, 'seven'),
+      )
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    sytem_deceptive = models.IntegerField(choices=JIAN_LEVEL, default=1)
+    system_underhanded = models.IntegerField(choices=JIAN_LEVEL, default=1)
+    system_sus_intent = models.IntegerField(choices=JIAN_LEVEL, default=1)
+    system_wary_system = models.IntegerField(choices=JIAN_LEVEL, default=1)
+    system_action_harmful = models.IntegerField(choices=JIAN_LEVEL, default=1)
+    system_confident = models.IntegerField(choices=JIAN_LEVEL, default=1)
+    system_security = models.IntegerField(choices=JIAN_LEVEL, default=1)
+    system_integrity = models.IntegerField(choices=JIAN_LEVEL, default=1)
+    system_dependable = models.IntegerField(choices=JIAN_LEVEL, default=1)
+    system_reliable = models.IntegerField(choices=JIAN_LEVEL, default=1)
+    systen_trust = models.IntegerField(choices=JIAN_LEVEL, default=1)
+    system_familiar = models.IntegerField(choices=JIAN_LEVEL, default=1)
+    initial_survey = models.BooleanField(default=True)
+
+
+
 

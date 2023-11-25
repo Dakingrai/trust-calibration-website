@@ -1,0 +1,370 @@
+{% extends "main/base.html" %}
+{% block content %}
+    <script>
+
+        function DeceptiveSystem(val) {
+            document.getElementById('deceptiveSystem').value=val;
+        }
+        function DeceptiveSystemForm(val) {
+            if (val < 1) {
+                val = 1;
+            } else if (val > 7) {
+                val = 7;
+            }
+
+            document.getElementById('deceptiveSystemForm').value=val;
+            document.getElementById('deceptiveSystem').value=val;
+        }
+
+        function UnderhandedManner(val) {
+            document.getElementById('underhandedManner').value=val;
+        }
+
+        function UnderhandedMannerForm(val) {
+            if (val < 1) {
+                val = 1;
+            } else if (val > 7) {
+                val = 7;
+            }
+            
+            document.getElementById('underhandedMannerForm').value=val;
+            document.getElementById('underhandedManner').value=val;
+        }
+
+        function SusSystemIntent(val) {
+            document.getElementById('susSystemIntent').value=val;
+        }
+
+        function SusSystemIntentForm(val) {
+            if (val < 1) {
+                val = 1;
+            } else if (val > 7) {
+                val = 7;
+            }
+
+            document.getElementById('susSystemIntentForm').value=val;
+            document.getElementById('susSystemIntent').value=val;
+        }
+
+        function WarySystem(val) {
+            document.getElementById('warySystem').value=val;
+        }
+
+        function WarySystemForm(val) {
+            if (val < 1) {
+                val = 1;
+            } else if (val > 7) {
+                val = 7;
+            }
+
+            document.getElementById('warySystemForm').value=val;
+            document.getElementById('warySystem').value=val;
+        }
+
+        function ActionHarmful(val) {
+            document.getElementById('actionHarmful').value=val;
+        }
+
+        function ActionHarmfulForm(val) {
+            if (val < 1) {
+                val = 1;
+            } else if (val > 7) {
+                val = 7;
+            }
+
+            document.getElementById('actionHarmfulForm').value=val;
+            document.getElementById('actionHarmful').value=val;
+        }
+
+        function ConfidentSystem(val) {
+            document.getElementById('confidentSystem').value=val;
+        }
+
+        function ConfidentSystemForm(val) {
+            if (val < 1) {
+                val = 1;
+            } else if (val > 7) {
+                val = 7;
+            }
+
+            document.getElementById('confidentSystemForm').value=val;
+            document.getElementById('confidentSystem').value=val;
+        }
+
+        function SystemSecurity(val) {
+            document.getElementById('systemSecurity').value=val;
+        }
+
+        function SystemSecurityForm(val) {
+            if (val < 1) {
+                val = 1;
+            } else if (val > 7) {
+                val = 7;
+            }
+
+            document.getElementById('systemSecurityForm').value=val;
+            document.getElementById('systemSecurity').value=val;
+        }
+
+        function SystemIntegrity(val) {
+            document.getElementById('systemIntegrity').value=val;
+        }
+
+        function SystemIntegrityForm(val) {
+            if (val < 1) {
+                val = 1;
+            } else if (val > 7) {
+                val = 7;
+            }
+
+            document.getElementById('systemIntegrityForm').value=val;
+            document.getElementById('systemIntegrity').value=val;
+        }
+
+        function SystemDependable(val) {
+            document.getElementById('systemDependable').value=val;
+        }
+
+        function SystemDependableForm(val) {
+            if (val < 1) {
+                val = 1;
+            } else if (val > 7) {
+                val = 7;
+            }
+
+            document.getElementById('systemDependableForm').value=val;
+            document.getElementById('systemDependable').value=val;
+        }
+
+        function SystemReliable(val) {
+            document.getElementById('systemReliable').value=val;
+        }
+
+        function SystemReliableForm(val) {
+            if (val < 1) {
+                val = 1;
+            } else if (val > 7) {
+                val = 7;
+            }
+
+            document.getElementById('systemReliableForm').value=val;
+            document.getElementById('systemReliable').value=val;
+        }
+
+        function TrustMachine(val) {
+            document.getElementById('trustMachine').value=val;
+        }
+
+        function TrustMachineForm(val) {
+            if (val < 1) {
+                val = 1;
+            } else if (val > 7) {
+                val = 7;
+            }
+            
+            document.getElementById('trustMachineForm').value=val;
+            document.getElementById('trustMachine').value=val;
+        }
+
+        function FamiliarSystem(val) {
+            document.getElementById('familiarSystem').value=val;
+        }
+
+        function FamiliarSystemForm(val) {
+            if (val < 1) {
+                val = 1;
+            } else if (val > 7) {
+                val = 7;
+            }
+            
+            document.getElementById('familiarSystemForm').value=val;
+            document.getElementById('familiarSystem').value=val;
+        }
+
+
+
+    </script>
+    <h3>Questionnaire</h3>
+    <hr>
+
+    <div class="card card-body">
+        <span class="card-title"><b>SELF REPORT: </b> Please answer the following questions to the best of your abilities.</span>
+    </div>
+    <hr>
+    <form action="{% url 'jian-scale' %}" method="post">
+        {% csrf_token %}
+        
+        <div class="form-group" style="width: 80%;">
+            <label for="customRange2" class="form-label">The system is deceptive.</label>
+            <div class="row">
+                <div class = "col-md-6">
+                    <input type="range" class="form-range" min="1" max="7" id="deceptiveSystemForm" onchange="DeceptiveSystem(this.value);"> 
+                </div>
+                <div class="col-md-1">
+                    <input class="form-control" type="number" name="deceptive_system" id="deceptiveSystem" value="4" required onchange="DeceptiveSystemForm(this.value)">
+                </div>
+                <div class="col-md-3">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" style="width: 80%;">
+            <label for="customRange2" class="form-label">The system behaves in an underhanded manner.</label>
+            <div class="row">
+                <div class = "col-md-6">
+                    <input type="range" class="form-range" min="1" max="7" id="underhandedMannerForm" onchange="UnderhandedManner(this.value);"> 
+                </div>
+                <div class="col-md-1">
+                    <input class="form-control" type="number" name="underhanded_manner" id="underhandedManner" value="4" required onchange="UnderhandedMannerForm(this.value)">
+                </div>
+                <div class="col-md-3">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" style="width: 80%;">
+            <label for="customRange2" class="form-label">I am suspicious of the system's intent, action, or outputs.</label>
+            <div class="row">
+                <div class = "col-md-6">
+                    <input type="range" class="form-range" min="1" max="7" id="susSystemIntentForm" onchange="SusSystemIntent(this.value);"> 
+                </div>
+                <div class="col-md-1">
+                    <input class="form-control" type="number" name="sus_system_intent" id="susSystemIntent" value="4" required onchange="SusSystemIntentForm(this.value)">
+                </div>
+                <div class="col-md-3">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group" style="width: 80%;">
+            <label for="customRange2" class="form-label">I am wary of the system.</label>
+            <div class="row">
+                <div class = "col-md-6">
+                    <input type="range" class="form-range" min="1" max="7" id="warySystemForm" onchange="WarySystem(this.value);"> 
+                </div>
+                <div class="col-md-1">
+                    <input class="form-control" type="number" name="wary_system" id="warySystem" value="4" required onchange="WarySystemForm(this.value)">
+                </div>
+                <div class="col-md-3">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" style="width: 80%;">
+            <label for="customRange2" class="form-label">The system's action will have a harmful or injurios outcome.</label>
+            <div class="row">
+                <div class = "col-md-6">
+                    <input type="range" class="form-range" min="1" max="7" id="actionHarmfulForm" onchange="ActionHarmful(this.value);"> 
+                </div>
+                <div class="col-md-1">
+                    <input class="form-control" type="number" name="action_harmful" id="actionHarmful" value="4" required onchange="ActionHarmfulForm(this.value)">
+                </div>
+                <div class="col-md-3">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" style="width: 80%;">
+            <label for="customRange2" class="form-label">I am confident in the system.</label>
+            <div class="row">
+                <div class = "col-md-6">
+                    <input type="range" class="form-range" min="1" max="7" id="confidentSystemForm" onchange="ConfidentSystem(this.value);"> 
+                </div>
+                <div class="col-md-1">
+                    <input class="form-control" type="number" name="confident_system" id="confidentSystem" value="4" required onchange="ConfidentSystemForm(this.value)">
+                </div>
+                <div class="col-md-3">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" style="width: 80%;">
+            <label for="customRange2" class="form-label">The system provides security.</label>
+            <div class="row">
+                <div class = "col-md-6">
+                    <input type="range" class="form-range" min="1" max="7" id="systemSecurityForm" onchange="SystemSecurity(this.value);"> 
+                </div>
+                <div class="col-md-1">
+                    <input class="form-control" type="number" name="system_security" id="systemSecurity" value="4" required onchange="SystemSecurityForm(this.value)">
+                </div>
+                <div class="col-md-3">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" style="width: 80%;">
+            <label for="customRange2" class="form-label">The system has integrity.</label>
+            <div class="row">
+                <div class = "col-md-6">
+                    <input type="range" class="form-range" min="1" max="7" id="systemIntegrityForm" onchange="SystemIntegrity(this.value);"> 
+                </div>
+                <div class="col-md-1">
+                    <input class="form-control" type="number" name="system_integrity" id="systemIntegrity" value="4" required onchange="SystemSecurityForm(this.value)">
+                </div>
+                <div class="col-md-3">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" style="width: 80%;">
+            <label for="customRange2" class="form-label">The system is dependable.</label>
+            <div class="row">
+                <div class = "col-md-6">
+                    <input type="range" class="form-range" min="1" max="7" id="systemDependableForm" onchange="SystemDependable(this.value);"> 
+                </div>
+                <div class="col-md-1">
+                    <input class="form-control" type="number" name="system_dependable" id="systemDependable" value="4" required onchange="SystemDependableForm(this.value)">
+                </div>
+                <div class="col-md-3">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" style="width: 80%;">
+            <label for="customRange2" class="form-label">The system is reliable.</label>
+            <div class="row">
+                <div class = "col-md-6">
+                    <input type="range" class="form-range" min="1" max="7" id="systemReliableForm" onchange="SystemReliable(this.value);"> 
+                </div>
+                <div class="col-md-1">
+                    <input class="form-control" type="number" name="system_reliable" id="systemReliable" value="4" required onchange="SystemReliableForm(this.value)">
+                </div>
+                <div class="col-md-3">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" style="width: 80%;">
+            <label for="customRange2" class="form-label">I can trust the sytem.</label>
+            <div class="row">
+                <div class = "col-md-6">
+                    <input type="range" class="form-range" min="1" max="7" id="trustMachineForm" onchange="TrustMachine(this.value);"> 
+                </div>
+                <div class="col-md-1">
+                    <input class="form-control" type="number" name="trust_machine" id="trustMachine" value="4" required onchange="TrustMachineForm(this.value)">
+                </div>
+                <div class="col-md-3">
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group" style="width: 80%;">
+            <label for="customRange2" class="form-label">I am familiar with the system.</label>
+            <div class="row">
+                <div class = "col-md-6">
+                    <input type="range" class="form-range" min="1" max="7" id="familiarSystemForm" onchange="FamiliarSystem(this.value);"> 
+                </div>
+                <div class="col-md-1">
+                    <input class="form-control" type="number" name="familiar_system" id="familiarSystem" value="4" required onchange="FamiliarSystemForm(this.value)">
+                </div>
+                <div class="col-md-3">
+                </div>
+            </div>
+        </div>
+        
+        <hr>
+        <input type="submit" value="Submit" class="btn btn-primary">
+    </form>
+
+{% endblock content %}

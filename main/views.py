@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .models import Samples, Study, TrainingStudy, TrainingSamples, db_test, Hyperparameters, SqlExplanation, Spider_db, UserTransaprency
+from .models import Samples, Study, TrainingStudy, TrainingSamples, db_test, Hyperparameters, SqlExplanation, Spider_db, UserTransaprency, UserAgreement, UserTrust, JianTrustScale
 from .forms import StudyForm
 import random
 from django.http import HttpResponse
@@ -13,9 +13,65 @@ import copy, json
 from django.utils import timezone
 import random
 
+@login_required
+def process_user_agreement(request):
+    UserAgreementInstance = UserAgreement(user=request.user)
+    UserAgreementInstance.user_agreement_status = True
+    UserAgreementInstance.save()
+    return redirect(reverse('home'))
+
+@login_required
+def process_jian_scale(request):
+    UserJianScaleInstance = JianTrustScale(user=request.user)
+    UserJianScaleInstance.sytem_deceptive = request.POST.get('deceptive_system')
+    UserJianScaleInstance.system_underhanded = request.POST.get('underhanded_manner')
+    UserJianScaleInstance.system_sus_intent = request.POST.get('sus_system_intent')
+    UserJianScaleInstance.system_wary_system = request.POST.get('wary_system')
+    UserJianScaleInstance.system_action_harmful = request.POST.get('action_harmful')
+    UserJianScaleInstance.system_confident = request.POST.get('confident_system')
+    UserJianScaleInstance.system_security = request.POST.get('system_security')
+    UserJianScaleInstance.system_integrity = request.POST.get('system_integrity')
+    UserJianScaleInstance.system_dependable = request.POST.get('system_dependable')
+    UserJianScaleInstance.system_reliable = request.POST.get('system_reliable')
+    UserJianScaleInstance.systen_trust = request.POST.get('trust_machine')
+    UserJianScaleInstance.system_familiar = request.POST.get('familiar_system')
+    UserJianScaleInstance.save()
+    return redirect(reverse('home'))
+
+@login_required
+def process_user_trust(request):
+    UserTrustInstance = UserTrust(user=request.user)
+    UserTrustInstance.user_trust_status = True
+    UserTrustInstance.trust_until_no_reason = request.POST.get('trust_machine')
+    UserTrustInstance.most_part_i_distrust = request.POST.get('distrust_machine')
+    UserTrustInstance.rely_on_machine_assist = request.POST.get('machine_to_assist')
+    UserTrustInstance.tendency_to_trust = request.POST.get('tendency_to_trust_high')
+    UserTrustInstance.easy_for_me_to_trust = request.POST.get('easy_to_trust')
+    UserTrustInstance.likely_to_trust = request.POST.get('likely_to_trust')
+
+    # print(request.POST.get('system_deceptive'))
+    # print(request.POST.get('underhanded_manner'))
+    # UserTrustInstance.trust_until_no_reason = request.POST.get('trust_machine')
+    # UserTrustInstance.most_part_i_distrust = request.POST.get('distrust_machine')
+    # UserTrustInstance.like_machine_to_assist = request.POST.get('assist_me')
+    # UserTrustInstance.tendency_to_trust = request.POST.get('trust_high')
+    UserTrustInstance.save()
+    return redirect(reverse('home'))
 
 @login_required
 def home(request):
+    user_agreement = UserAgreement.objects.filter(user=request.user).count()
+    if user_agreement == 0:
+        user_agreement_text = Hyperparameters.objects.all().first().agreement_text
+        return render(request, 'main/user_agreement.html', {'user_agreement_text': user_agreement_text})
+    user_trust = UserTrust.objects.filter(user=request.user).count()
+    if user_trust == 0:
+        return render(request, 'main/user_trust.html')
+    
+    jian_scale = JianTrustScale.objects.filter(user=request.user).count()
+    if jian_scale == 0:
+        return render(request, 'main/jian_scale.html')
+    
     all_count = Study.objects.filter(user=request.user).count()
     training_count = TrainingStudy.objects.filter(user=request.user).count()
     not_responded_train_count = TrainingStudy.objects.filter(user=request.user, viewed=True).count()
@@ -102,6 +158,8 @@ def convert_str_to_list_depth3(input_string):
 @login_required
 def study(request, pk):
     study_sample = Study.objects.get(id=pk, user=request.user)
+    if study_sample.user_response is not None:
+        return redirect(reverse('start-study'))
     if request.method == 'POST':
         btn_value = bool(int(request.POST.get('btn_value')))
         if btn_value:
@@ -111,6 +169,7 @@ def study(request, pk):
         study_sample.viewed = True
         study_sample.save()
         return redirect(reverse('start-study'))
+
     # pdb.set_trace()
     # try:
     #     prev_sample = Study.objects.filter(id__lt=pk, user=request.user, viewed=True).order_by('-id').first()
@@ -251,6 +310,8 @@ def start_training_study(request):
 @login_required
 def trainining_study(request, pk):
     study_sample = TrainingStudy.objects.get(id=pk, user=request.user)
+    if study_sample.user_response is not None:
+        return redirect(reverse('start-training-study'))
     if request.method == 'POST':
         btn_value = bool(int(request.POST.get('btn_value')))
         if btn_value:

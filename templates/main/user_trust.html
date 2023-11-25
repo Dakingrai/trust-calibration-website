@@ -1,0 +1,207 @@
+{% extends "main/base.html" %}
+{% block content %}
+    <script>
+
+        function TrustMachine(val) {
+            document.getElementById('trustMachine').value=val;
+        }
+        function TrustMachineForm(val) {
+            if (val < 1) {
+                val = 1;
+            } else if (val > 5) {
+                val = 5;
+            }
+
+            document.getElementById('trustMachineForm').value=val;
+            document.getElementById('trustMachine').value=val;
+        }
+
+        function MostPartDistrust(val) {
+            document.getElementById('mostPartDistrust').value=val;
+        }
+
+        function MostPartDistrustForm(val) {
+            if (val < 1) {
+                val = 1;
+            } else if (val > 5) {
+                val = 5;
+            }
+
+            document.getElementById('mostPartDistrustForm').value=val;
+            document.getElementById('mostPartDistrust').value=val;
+        }
+
+
+        function MachineToAssist(val) {
+            document.getElementById('machineToAssist').value=val;
+        }
+
+        function MachineToAssistForm(val) {
+            if (val < 1) {
+                val = 1;
+            } else if (val > 5) {
+                val = 5;
+            }
+
+            document.getElementById('machineToAssistForm').value=val;
+            document.getElementById('machineToAssist').value=val;
+        }
+
+        function TendencyToTrustHigh(val) {
+            document.getElementById('tendencyToTrustHigh').value=val;
+        }
+
+        function TendencyToTrustHighForm(val) {
+            if (val < 1) {
+                val = 1;
+            } else if (val > 5) {
+                val = 5;
+            }
+            document.getElementById('tendencyToTrustHighForm').value=val;
+            document.getElementById('tendencyToTrustHigh').value=val;
+        }
+
+        function EasyToTrust(val) {
+            document.getElementById('easyToTrust').value=val;
+        }
+
+        function EasyToTrustForm(val) {
+            if (val < 1) {
+                val = 1;
+            } else if (val > 5) {
+                val = 5;
+            }
+            document.getElementById('easyToTrustForm').value=val;
+            document.getElementById('easyToTrust').value=val;
+        }
+
+        function LikelyToTrust(val) {
+            document.getElementById('likelyToTrust').value=val;
+        }
+
+        function LikelyToTrustForm(val) {
+            if (val < 1) {
+                val = 1;
+            } else if (val > 5) {
+                val = 5;
+            }
+            document.getElementById('likelyToTrustForm').value=val;
+            document.getElementById('likelyToTrust').value=val;
+
+        }
+
+
+
+        function updateUnderhandedManner(val) {
+            document.getElementById('underHandedManner').value=val;
+        }
+    </script>
+    <h3>Questionnaire</h3>
+    <hr>
+
+    <div class="card card-body">
+        <span class="card-title"><b>SELF REPORT: </b> Please answer the following questions to the best of your abilities.</span>
+        <div class="card-text">
+                Strongly disagree = 1,
+                Somewhat disagree = 2,
+                Neither agree nor disagree = 3,
+                Somewhat agree = 4,
+                Strongly Agree = 5
+        </div>
+    </div>
+    <hr>
+    <form action="{% url 'user-trust' %}" method="post">
+        {% csrf_token %}
+        
+        <div class="form-group" style="width: 80%;">
+            <label for="customRange2" class="form-label">I usually trust machine until there is no reason to 1.</label>
+            <div class="row">
+                <div class = "col-md-6">
+                    <input type="range" class="form-range" min="1" max="5" id="trustMachineForm" onchange="TrustMachine(this.value);"> 
+                </div>
+                <div class="col-md-1">
+                    <input class="form-control" type="number" name="trust_machine" id="trustMachine" value="3" required onchange="TrustMachineForm(this.value)">
+                </div>
+                <div class="col-md-3">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" style="width: 80%;">
+            <label for="customRange2" class="form-label">For the most part, I distrust machines.</label>
+            <div class="row">
+                <div class = "col-md-6">
+                    <input type="range" class="form-range" min="1" max="5" id="mostPartDistrustForm" onchange="MostPartDistrust(this.value);"> 
+                </div>
+                <div class="col-md-1">
+                    <input class="form-control" type="number" name="distrust_machine" id="mostPartDistrust" value="3" required onchange="MostPartDistrustForm(this.value)">
+                </div>
+                <div class="col-md-3">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" style="width: 80%;">
+            <label for="customRange3" class="form-label">In general, I would rely on a machine to assist me.</label>
+            <div class="row">
+                <div class = "col-md-6">
+                    <input type="range" class="form-range" min="1" max="5" id="machineToAssistForm" onchange="MachineToAssist(this.value);"> 
+                </div>
+                <div class="col-md-1">
+                    <input class="form-control" type="number" name="machine_to_assist" id="machineToAssist" value="3" required onchange="MachineToAssistForm(this.value)">
+                </div>
+                <div class="col-md-3">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group" style="width: 80%;">
+            <label for="customRange2" class="form-label">My tendency to trust machines is high.</label>
+            <div class="row">
+                <div class = "col-md-6">
+                    <input type="range" class="form-range" min="1" max="5" id="tendencyToTrustHighForm" onchange="TendencyToTrustHigh(this.value);"> 
+                </div>
+                <div class="col-md-1">
+                    <input class="form-control" type="number" name="tendency_to_trust_high" id="tendencyToTrustHigh" value="3" required onchange="TendencyToTrustHighForm(this.value)">
+                </div>
+                <div class="col-md-3">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group" style="width: 80%;">
+            <label for="customRange2" class="form-label">It is easy for me to trust machines to do their job.</label>
+            <div class="row">
+                <div class = "col-md-6">
+                    <input type="range" class="form-range" min="1" max="5" id="easyToTrustForm" onchange="EasyToTrust(this.value);"> 
+                </div>
+                <div class="col-md-1">
+                    <input type="number" class="form-control" name="easy_to_trust" id="easyToTrust" value="3" required onchange="EasyToTrustForm(this.value)">
+                </div>
+                <div class="col-md-3">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group" style="width: 80%;">
+            <label for="customRange2" class="form-label">I am likely to trust a machine even when I have little knowledge about it.</label>
+            <div class="row">
+                <div class = "col-md-6">
+                    <input type="range" class="form-range" min="1" max="5" id="likelyToTrustForm" onchange="LikelyToTrust(this.value);"> 
+                </div>
+                <div class="col-md-1">
+                    <input class="form-control" type="number" name="likely_to_trust" id="likelyToTrust" min="1" max="5" value="3" required onchange="LikelyToTrustForm(this.value)">
+                </div>
+                <div class="col-md-3">
+                </div>
+            </div>
+        </div>
+        
+        <hr>
+        <input type="submit" value="Submit" class="btn btn-primary">
+    </form>
+
+{% endblock content %}

@@ -1,0 +1,12 @@
+{% extends "main/base.html" %}
+{% block content %}
+    <h3>User Agreement</h3>
+    <form action="{% url 'user-agreement' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="user-agreement">Please read the following agreement and click the checkbox to indicate that you agree to the terms and conditions.</label>
+            <textarea class="form-control" rows="20" id="user-agreement" name="user-agreement" readonly>{{user_agreement_text}}
+            </textarea>
+        <input type="submit" value="Submit" class="btn btn-lg btn-primary">
+    </form>
+{% endblock content %}
