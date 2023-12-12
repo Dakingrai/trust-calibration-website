@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Study, Samples, Spider_db, db_test, Hyperparameters, SqlExplanation, UserTransaprency, TrainingSamples, TrainingStudy, UserTrust, UserAgreement, JianTrustScale
+from .models import UserDemographic, Study, Samples, Spider_db, db_test, Hyperparameters, SqlExplanation, UserTransaprency, TrainingSamples, TrainingStudy, UserTrust, UserAgreement, JianTrustScale
 from django.urls import path
 from django.shortcuts import render
 from django import forms
@@ -17,6 +17,17 @@ class StudyAdmin(admin.ModelAdmin):
     list_filter = ['user']
     save_on_top = True
     list_editable = ['viewed', 'user_response']
+
+class TrainingStudyAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'sample', 'user_response', 'viewed', 'created', 'updated', 'start_time')
+    list_filter = ['user']
+    save_on_top = True
+    list_editable = ['viewed', 'user_response']
+
+class UserTransaprencyAdmin(admin.ModelAdmin):
+    list_display = ('username', 'user_transparency')
+    list_editable = ['user_transparency']
+    save_on_top = True
     
 class SamplesAdmin(admin.ModelAdmin):
     list_display = ('sample_name', 'question', 'database_name', "hardness", "correct_prediction")
@@ -57,15 +68,16 @@ class SamplesAdmin(admin.ModelAdmin):
 
 admin.site.register(Samples, SamplesAdmin)
 admin.site.register(Study, StudyAdmin)
+admin.site.register(UserTransaprency, UserTransaprencyAdmin)
 admin.site.register(Spider_db)
 admin.site.register(db_test)
 admin.site.register(Hyperparameters)
 admin.site.register(SqlExplanation)
-admin.site.register(UserTransaprency)
 admin.site.register(TrainingSamples)
-admin.site.register(TrainingStudy)
+admin.site.register(TrainingStudy, TrainingStudyAdmin)
 admin.site.register(UserTrust)
 admin.site.register(UserAgreement)
 admin.site.register(JianTrustScale)
+admin.site.register(UserDemographic)
 admin.site.site_header = "Trust Calibration Admin"
 

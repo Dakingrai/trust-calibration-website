@@ -188,10 +188,10 @@
     <hr>
 
     <div class="card card-body">
-        <span class="card-title"><b>SELF REPORT: </b> Please answer (1-7) the following questions based on your expectation of system performance.</span>
+        <span class="card-title"><b>SELF REPORT: </b> Now that you have interacted with AI system, please answer (1-7) the following questions based on your expectation of system performance.</span>
     </div>
     <hr>
-    <form action="{% url 'jian-scale' %}" method="post">
+    <form action="{% url 'jian-scale-after' %}" method="post">
         {% csrf_token %}
         
         <div class="form-group" style="width: 80%;">

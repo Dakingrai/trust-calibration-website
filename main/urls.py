@@ -17,4 +17,7 @@ urlpatterns = [
     path('user-agreement/', views.process_user_agreement, name="user-agreement"),
     path('user-trust/', views.process_user_trust, name="user-trust"),
     path('jian-scale/', views.process_jian_scale, name="jian-scale"),
+    path('user-trust-after/', views.process_user_trust_after, name="user-trust-after"),
+    path('jian-scale-after/', views.process_jian_scale_after, name="jian-scale-after"),
+    path('demographic-save/', views.process_demographic, name="demographic-save")
 ]

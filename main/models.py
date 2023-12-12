@@ -137,18 +137,15 @@ class UserTrust(models.Model):
     easy_for_me_to_trust = models.IntegerField(choices=TRUST_LEVEL, default=3)
     likely_to_trust = models.IntegerField(choices=TRUST_LEVEL, default=3)
     user_trust_status = models.BooleanField(default=False)
+    before_study = models.BooleanField(default=True)
 
 
 class UserDemographic(models.Model):
-    GENDER = [
-        ("M", "Male"),
-        ("F", "Female"),
-        ("O", "Others"),
-    ]
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, blank=True, null=True)
     age = models.IntegerField(blank=True, null=True)
-    gender = models.CharField(max_length=100, blank=True, null=True, choices=GENDER)
+    gender = models.CharField(max_length=100, blank=True, null=True)
+    race = models.CharField(max_length=100, blank=True, null=True)
 
 class JianTrustScale(models.Model):
     JIAN_LEVEL = (
@@ -174,6 +171,7 @@ class JianTrustScale(models.Model):
     systen_trust = models.IntegerField(choices=JIAN_LEVEL, default=1)
     system_familiar = models.IntegerField(choices=JIAN_LEVEL, default=1)
     initial_survey = models.BooleanField(default=True)
+    before_study = models.BooleanField(default=True)
 
 
 

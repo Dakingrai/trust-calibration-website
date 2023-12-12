@@ -1,21 +1,30 @@
 {% extends "main/base.html" %}
 {% block content %}
     <h2> Welcome {{user.username}}! </h2>
-    <h5 style="margin-top: 30px; margin-bottom: 30px;"> You have responded to {{responded_count}} items out of {{all_count}} study items. </h5>
-    <h5 style="margin-top: 30px; margin-bottom: 30px;"> You have responded to {{train_responded}} training items out of {{training_count}} training items. </h5>
+    
         {% if user.is_staff %}
         <a class="btn btn-primary" href="{% url 'create-samples' %}">Create Samples</a>
         <a class="btn btn-warning" href="{% url 'reset-study' %}">Reset User Study</a>
         <a class="btn btn-warning" href="{% url 'delete-study' %}" onclick="return confirm('Are you sure?')"> Delete User Study</a>
         <a class="btn btn-success" href="{% url 'generate-report' %}">Generate report</a>
         {% endif %}
-    <a class="btn btn-info" href="{% url 'start-study' %}">Start User Study</a>
+    {% if finished_training %}
+        <a class="btn btn-info" href="{% url 'start-study' %}" disabled>Start User Study</a>
+    {% endif %}
     <p style="margin-top: 20px;">
         {% if user.is_staff %}
         <a class="btn btn-primary" href="{% url 'create-training-samples' %}">Create Training Samples</a>
         <a class="btn btn-primary" href="{% url 'reset-training-study' %}">Reset Training Samples</a>
         <a class="btn btn-primary" href="{% url 'delete-training-samples' %}">Delete Training Samples</a>
         {% endif %}
-        <a class="btn btn-info" href="{% url 'start-training-study' %}">Start Training</a>
+        {% if finished_study %}
+            <button class="btn btn-info" href="{% url 'start-training-study' %}" disabled>Start Training</button>
+        {% else %}
+            {% if finished_training %}
+                <button class="btn btn-info" href="#" disabled>Start Training</button>
+            {% else %}
+                <a class="btn btn-info" href="{% url 'start-training-study' %}">Start Training</a>
+            {% endif %}
+        {% endif %}
     </p>
 {% endblock content %}

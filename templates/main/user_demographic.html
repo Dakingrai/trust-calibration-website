@@ -1,0 +1,43 @@
+{% extends "main/base.html" %}
+{% block content %}
+<h3> Demographics Questionnaire ​</h3>
+<hr>
+<div class="card card-body">
+    <span class="card-title"><b>SELF REPORT: </b> Please answer the following questions to the best of your abilities.</span>
+</div>
+<br>
+<br>
+
+<form action="{% url 'demographic-save' %}" method="post">
+    {% csrf_token %}
+
+    <div class="form-group">
+        <label for="formGroupExampleInput">What is your name?</label>
+        <input type="text" class="form-control" id="formGroupExampleInput" name="your-name" required>
+    </div> <br>
+
+    <div class="form-group">
+        <label for="formGroupExampleInput">What is your age?</label>
+        <input type="text" class="form-control" id="formGroupExampleInput" name="your-age" required>
+    </div> <br>
+
+    <div class="form-group">
+        <label for="formGroupExampleInput">What is your biological sex?</label> <br>
+        <select class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" name="your-sex" required>Select
+            <span class="caret"></span>
+            <option class="dropdown-item" value="male">Male</option>
+            <option class="dropdown-item" value="female">Female</option>
+            
+        </select> 
+    </div> <br>
+
+    <div class="form-group">
+        <label for="formGroupExampleInput">What is your racial or ethnic identification?</label>
+        <input type="text" class="form-control" id="formGroupExampleInput" name="your-race" required>
+    </div>
+
+    <hr>
+        <input type="submit" value="Submit" class="btn btn-primary">
+</form>
+
+{% endblock content %}

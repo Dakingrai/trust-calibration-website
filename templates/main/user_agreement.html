@@ -1,12 +1,57 @@
 {% extends "main/base.html" %}
 {% block content %}
-    <h3>User Agreement</h3>
+    <h3 style="text-align: center;">
+        Calibrating Trust in Human-Machine Interactions with Algorithm Transparency
+        <br>
+        [1653925-5]
+        <br>
+            INFORMED CONSENT FORM
+    </h3>
+    <div class="consent-body">
+        <h5>RESEARCH PROCEDURES</h5>
+        <p>The purpose of this study is to understand </p>
+        <h5>RISKS</h5>
+        <p> There are no foreseeable risks for participating in this research.</p>
+        <h5>BENEFITS</h5>
+        <p>There are no benefits to you as a participant other than to extend the current knowledge on the relationship between humans and computer agent teams. </p>
+        <h5>CONFIDENTIALITY</h5>
+        <p> The de-identified data could be used for future research without additional consent from participants. The data in this study will be confidential and can only be accessed by researchers involved in the study. Data will be collected using an identifying code number that is not connected to your name. Data will be discussed in the form of group statistics, not individual scores. While it is understood that no computer transmission can be perfectly secure, reasonable efforts will be made to protect confidentiality of your transmission data. </p>
+        <p>The Institutional Review Board (IRB) committee that monitors research on human subjects may inspect study records during internal auditing procedures and are required to keep all information confidential.</p>
+        <h5>PARTICIPATION</h5>
+        <p>Participants may volunteer for this study if they are age 18+ and have normal or corrected to normal vision. Your participation is voluntary, and you may also withdraw from the study at any time for any reason. If you decide not to participate or if you withdraw from the study, there is no penalty or loss of benefits to which you are otherwise entitled. There are no costs to you or any other party.</p>
+        <p>Amazon Mechanical Turk: In order to obtain compensation, payment, for the task, you must complete all sections of the experiment.</p>
+        <p>SONA Online: You must complete all sections of the online experiment to receive SONA credit. You will receive 0.75 credits for completing the 40-minute online experiment. </p>
+        <p>Under the U.S. federal tax law, you may have individual responsibilities for disclosing the dollar value of the incentive received on this study.</p>
+
+        <h5>ALTERNATIVES TO PARTICIPATION</h5>
+        <p>Participants recruited through SONA Systems may decide to complete alternative written assignment in lieu of participating in our experiment. The amount of credit awarded for completing a written assignment is one written summary for each hour of your subject pool requirement. </p>
+
+        <h5>Contact</h5>
+        <p>This research is being done by <b>Dr. Ziyu Yao</b> and <b>Dr. Tyler Shaw</b> of the Psychology Department. Dr. Yao may be reached via email at <b><i>ziyuyao@gmu.edu</i></b> for questions or to report a research related problem. Dr. Shaw may be reached via email at <b><i>tshaw4@gmu.edu</i></b>. You may also contact the George Mason University Institutional Review Board (IRB) Office at <b><i>703-993-4121</i></b> or email at <b><i>irb@gmu.edu</i></b> if you have questions or comments regarding your rights as a participant in this research. This research has been reviewed according to the George Mason University procedures governing your participation in this research.</p>
+
+        <h5>CONSENT (ONLINE)</h5>
+        <p>Your participation in the task and completion of the surveys indicates your consent to participate.</p>
+
+    </div>
+    <div class="card card-body" style="margin-bottom: 50px;">
+
+    
     <form action="{% url 'user-agreement' %}" method="post">
         {% csrf_token %}
         <div class="form-group">
-            <label for="user-agreement">Please read the following agreement and click the checkbox to indicate that you agree to the terms and conditions.</label>
-            <textarea class="form-control" rows="20" id="user-agreement" name="user-agreement" readonly>{{user_agreement_text}}
-            </textarea>
-        <input type="submit" value="Submit" class="btn btn-lg btn-primary">
+            
+            <label for="consent"><b>Do you consent to participate in the current study?</b></label>
+            <br>
+            <select class="form-select" name="user_agreement_status" style="margin-top: 18px;">
+                <option selected>Open this select menu</option>
+                <option value="1">Yes</option>
+                <option value="2">No</option>
+              </select>
+            <br>
+            
+            If you have agreed to participate in the study and have entered the date, click the start button to begin the experiment. Otherwise, contact project researchers if you have any questions regarding the experiment.
+            <br>
+        <input type="submit" value="Submit" class="btn btn-lg btn-primary" style="margin-top: 10px;">
     </form>
+</div>
 {% endblock content %}

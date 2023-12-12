@@ -100,7 +100,7 @@
     <hr>
 
     <div class="card card-body">
-        <span class="card-title"><b>SELF REPORT: </b> Please answer the following questions to the best of your abilities.</span>
+        <span class="card-title"><b>SELF REPORT: </b> Now that you have interacted with AI system, please answer the following questions to the best of your abilities.</span>
         <div class="card-text">
                 Strongly disagree = 1,
                 Somewhat disagree = 2,
@@ -110,7 +110,7 @@
         </div>
     </div>
     <hr>
-    <form action="{% url 'user-trust' %}" method="post">
+    <form action="{% url 'user-trust-after' %}" method="post">
         {% csrf_token %}
         
         <div class="form-group" style="width: 80%;">
