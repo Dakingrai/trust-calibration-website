@@ -1,6 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+import random
 
 TRUST_LEVEL = (
     (0, 'Low'),
@@ -8,6 +12,36 @@ TRUST_LEVEL = (
     (2, 'High'),
   )
 
+@receiver(post_save, sender=User)
+def after_user_created(sender, instance, created, **kwargs):
+    if created:
+        # Your additional actions here
+        # For example, you can create a related profile, send a welcome email, etc.
+        print("Let's goooo!!!")
+        
+        # Create training samples for created users
+        all_samples = TrainingSamples.objects.all()
+        random_sample = [all_samples[i] for i in sorted(range(len(all_samples)))]
+        random.shuffle(random_sample)
+        for each in random_sample:
+            StudyInstance = TrainingStudy(user=instance, sample=each)
+            StudyInstance.save()
+        
+        # Create study samples for created users
+        all_samples = Samples.objects.all()
+        no_samples = Hyperparameters.objects.all().first().no_samples_per_user
+        random_sample = [all_samples[i] for i in sorted(random.sample(range(len(all_samples)), no_samples))] 
+        random.shuffle(random_sample)
+        for each in random_sample:
+            StudyInstance = Study(user=instance, sample=each)
+            StudyInstance.save()
+
+        # Assign transparency level for created users
+        UserTransaprencyInstance = UserTransaprency()
+        UserTransaprencyInstance.username = instance.username
+        UserTransaprencyInstance.user_transparency = "High"
+        UserTransaprencyInstance.save()
+        
 
 class Hyperparameters(models.Model):
     no_samples_per_user = models.IntegerField()

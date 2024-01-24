@@ -102,7 +102,6 @@ def process_demographic(request):
     UserDemoInstance.save()
     return redirect(reverse('home'))
 
-
 @login_required
 def process_jian_scale_after(request):
     system_deceptive = request.POST.get('deceptive_system')
