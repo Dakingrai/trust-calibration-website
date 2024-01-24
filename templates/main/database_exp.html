@@ -1,0 +1,17 @@
+{% extends "main/base.html" %}
+{% block content %}
+{% load static %}
+    
+    
+    <div class="row" style="padding: 25px 100px;">
+        <img src="{% static 'images/database_full.png' %}" alt="My image">
+    </div>
+    <form action="{% url 'database_view' %}" method="post">
+        {% csrf_token %}
+        <div class="text-center">
+            <button type="submit" class="btn btn-info btn-lg" > Continue </button>
+        </div>
+    </form>
+    
+</div>
+{% endblock content %}

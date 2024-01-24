@@ -147,6 +147,19 @@ class UserDemographic(models.Model):
     gender = models.CharField(max_length=100, blank=True, null=True)
     race = models.CharField(max_length=100, blank=True, null=True)
 
+class UserTrainingMeta(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    task_one = models.BooleanField(default=False)
+    task_two = models.BooleanField(default=False)
+    question = models.BooleanField(default=False)
+    feedback = models.BooleanField(default=False)
+    database = models.BooleanField(default=False)
+    model_explanation = models.BooleanField(default=False)
+    explanation_density = models.BooleanField(default=False)
+    general_task = models.BooleanField(default=False)
+    begin_train = models.BooleanField(default=False)
+    begin_study = models.BooleanField(default=False)
+
 class JianTrustScale(models.Model):
     JIAN_LEVEL = (
         (1, 'one'),

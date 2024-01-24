@@ -1,0 +1,36 @@
+{% extends "main/base.html" %}
+{% block content %}
+{% load static %}
+    
+    
+    <div class="row ">
+
+            <h3 style="margin: 30px 0px; text-align: center;">
+                Explanation: Database 
+            </h3>
+    
+            <div class="col-md-2"></div>
+    
+            <div class="col-md-2" style="margin: 30px 0px;">
+                <p>
+                    You will have access to view a database with more supplemental information that can be used on each question.
+                </p> 
+            </div>
+    
+            <div class="col-md-4">
+                <div style="text-align: center; ">
+                    <img src="{% static 'images/database.png' %}" alt="My image" style="max-width: 670px !important;">
+                </div>
+            </div>
+            <form action="{% url 'database_view' %}" method="post">
+                {% csrf_token %}
+                <div class="text-center" style="text-align: center;">
+                    <button type="submit" class="btn btn-primary btn-lg" > Continue </button>
+                </div>
+            </form>
+    
+            <div class="col-md-2"></div>
+    </div>
+    
+</div>
+{% endblock content %}

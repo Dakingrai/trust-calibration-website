@@ -19,5 +19,14 @@ urlpatterns = [
     path('jian-scale/', views.process_jian_scale, name="jian-scale"),
     path('user-trust-after/', views.process_user_trust_after, name="user-trust-after"),
     path('jian-scale-after/', views.process_jian_scale_after, name="jian-scale-after"),
-    path('demographic-save/', views.process_demographic, name="demographic-save")
+    path('demographic-save/', views.process_demographic, name="demographic-save"),
+    path('task-one-instruction/', views.task_one_view, name="task_one_view"),
+    path('question-instruction/', views.question_view, name="question_view"),
+    path('feedback-instruction/', views.feedback_view, name="feedback_view"),
+    path('database-instruction/', views.database_view, name="database_view"),
+    path('density-instruction/', views.density_view, name="density_view"),
+    path('model-instruction/', views.model_view, name="model_view"),
+    path('begin-train/', views.begin_train_view, name="begin_train_view"),
+    path('begin-study/', views.begin_study_view, name="begin_study_view"),
+    path('general-task-instruction/', views.general_task_view, name="general_task_view"),
 ]

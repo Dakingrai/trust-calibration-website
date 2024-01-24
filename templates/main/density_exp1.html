@@ -1,0 +1,17 @@
+{% extends "main/base.html" %}
+{% block content %}
+    <h3 style="text-align: center;">
+        Density Explanation
+    </h3>
+
+    <div class="row">
+        <form action="{% url 'density_view' %}" method="post">
+            {% csrf_token %}
+            <div class="text-center" style="text-align: center;">
+                <button type="submit" class="btn btn-primary btn-lg" > Continue </button>
+            </div>
+        </form>
+    </div>
+    
+</div>
+{% endblock content %}

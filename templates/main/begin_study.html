@@ -1,0 +1,21 @@
+{% extends "main/base.html" %}
+{% block content %}
+    <h3 style="text-align: center;">
+        Main Task 
+
+    </h3>
+    <div class="card card-body">
+        <p style="text-align: center;">You will now enter the main task which is identical to the practice</p>
+        <div class="row">
+            <form action="{% url 'begin_study_view' %}" method="post">
+                {% csrf_token %}
+                <div class="text-center" style="text-align: center;">
+                    <button type="submit" class="btn btn-primary btn-lg" > Continue </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    
+</div>
+{% endblock content %}

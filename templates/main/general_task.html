@@ -1,0 +1,31 @@
+{% extends "main/base.html" %}
+{% block content %}
+    <h3 style="text-align: center;">
+        Task Instructions
+    </h3>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="task-instruction col-md-8 card card-body">
+            <p>You will now begin the experiment. </p>
+            <p>Use your mouse to make a selection of <b>“Yes” </b> or <b>“No”</b>. You may choose to follow the model prediction provided by the database or select a different response. </p>
+            <p>Once you have made the final selection, a message will appear explaining whether or not the correct answer was selected. The next trial will begin as soon as you select the next example button. </p>
+            <p>Use only the mouse click for all responses in the experiment. You do not need to use the keyboard. </p>
+            <p>Click the button below to begin the experiment.</p>
+
+
+            <form action="{% url 'general_task_view' %}" method="post">
+                {% csrf_token %}
+                <div class="text-center" style="text-align: center;">
+                    <button type="submit" class="btn btn-primary btn-lg" > Continue </button>
+                </div>
+            </form>
+            
+        </div>
+        <div class="col-md-2"></div>
+
+        
+    </div>
+
+    
+</div>
+{% endblock content %}

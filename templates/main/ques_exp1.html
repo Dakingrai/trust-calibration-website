@@ -1,0 +1,40 @@
+{% extends "main/base.html" %}
+{% block content %}
+{% load static %}
+
+    <div class="row">
+        <div class="col-md-2"></div>
+
+        <div class="col-md-8">
+            <h3>
+                Explanation: Question
+            </h3>
+            <div style="text-align: center; ">
+                <img src="{% static 'images/question.png' %}" alt="My image">
+            </div>
+
+            <div>
+                <p>
+                    On each trial, you will be asked a randomized question under Question. Please review the question at the top of the screen before answering whether or not you believe the prediction to be correct.  
+
+                </p>
+                <p>
+                    The system will also give you it’s prediction of the correct answer under Model Prediction.
+                </p>
+            </div>
+            
+
+            <form action="{% url 'question_view' %}" method="post">
+                {% csrf_token %}
+                <div class="text-center" style="text-align: center;">
+                    <button type="submit" class="btn btn-primary btn-lg" > Continue </button>
+                </div>
+            </form>
+        </div>
+    
+        <div class="col-md-2"></div>
+    </div>
+
+
+</div>
+{% endblock content %}

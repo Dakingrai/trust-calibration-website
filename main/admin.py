@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UserDemographic, Study, Samples, Spider_db, db_test, Hyperparameters, SqlExplanation, UserTransaprency, TrainingSamples, TrainingStudy, UserTrust, UserAgreement, JianTrustScale
+from .models import UserTrainingMeta, UserDemographic, Study, Samples, Spider_db, db_test, Hyperparameters, SqlExplanation, UserTransaprency, TrainingSamples, TrainingStudy, UserTrust, UserAgreement, JianTrustScale
 from django.urls import path
 from django.shortcuts import render
 from django import forms
@@ -69,6 +69,7 @@ class SamplesAdmin(admin.ModelAdmin):
 admin.site.register(Samples, SamplesAdmin)
 admin.site.register(Study, StudyAdmin)
 admin.site.register(UserTransaprency, UserTransaprencyAdmin)
+admin.site.register(UserTrainingMeta)
 admin.site.register(Spider_db)
 admin.site.register(db_test)
 admin.site.register(Hyperparameters)

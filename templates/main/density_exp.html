@@ -1,0 +1,17 @@
+{% extends "main/base.html" %}
+{% block content %}
+{% load static %}
+    
+    
+    <div class="row" style="padding: 35px;">
+        <img src="{% static 'images/density_full.png' %}" alt="My image">
+    </div>
+    <form action="{% url 'density_view' %}" method="post">
+        {% csrf_token %}
+        <div class="text-center">
+            <button type="submit" class="btn btn-info btn-lg" > Continue </button>
+        </div>
+    </form>
+    
+</div>
+{% endblock content %}
