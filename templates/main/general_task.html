@@ -3,7 +3,7 @@
     <h3 style="text-align: center;">
         Task Instructions
     </h3>
-    <div class="row">
+    <div class="row" style="margin: 10px;">
         <div class="col-md-2"></div>
         <div class="task-instruction col-md-8 card card-body">
             <p>You will now begin the experiment. </p>
@@ -13,18 +13,20 @@
             <p>Click the button below to begin the experiment.</p>
 
 
-            <form action="{% url 'general_task_view' %}" method="post">
-                {% csrf_token %}
-                <div class="text-center" style="text-align: center;">
-                    <button type="submit" class="btn btn-primary btn-lg" > Continue </button>
-                </div>
-            </form>
+            
             
         </div>
         <div class="col-md-2"></div>
 
         
     </div>
+
+    <form action="{% url 'general_task_view' %}" method="post">
+        {% csrf_token %}
+        <div class="text-center" style="text-align: center;">
+            <button type="submit" class="btn btn-primary btn-lg" > Continue </button>
+        </div>
+    </form>
 
     
 </div>

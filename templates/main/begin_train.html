@@ -1,14 +1,30 @@
 {% extends "main/base.html" %}
 {% block content %}
-    <h3 style="text-align: center; margin-top: 35px;">
+<div class="card card-body" style="padding: 30px; margin: 35px; ">
+    <h3 style="text-align: center; ">
         10 Practice Trial Starts
     </h3>
     <p style="text-align: center;">You will now begin the practice trials. </p>
+</div>
+    
     <div class="row">
         <form action="{% url 'begin_train_view' %}" method="post">
             {% csrf_token %}
-            <div class="text-center" style="text-align: center;">
-                <button type="submit" class="btn btn-primary btn-lg" > Continue </button>
+            <div class="row">
+                <div class="col-md-4"></div>
+                {% if user_transparency == "Low" %}
+                    <div class="text-center col-md-2">
+                        <a href="{% url 'feedback_view' %}" class="btn btn-info btn-lg">Back</a>
+                    </div>
+                {% else %}
+                    <div class="text-center col-md-2">
+                        <a href="{% url 'density_view' %}" class="btn btn-info btn-lg">Back</a>
+                    </div>
+                {% endif %}
+                <div class="text-center col-md-2">
+                    <button type="submit" class="btn btn-primary btn-lg" > Continue </button>
+                </div>
+                <div class="col-md-4"></div>
             </div>
         </form>
     </div>

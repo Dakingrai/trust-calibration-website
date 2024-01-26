@@ -3,13 +3,21 @@
 {% load static %}
     
     
-    <div class="row" style="padding: 35px;">
+    <div class="row card card-body" style="margin: 10px; padding: 30px; height:auto; max-height:80%; overflow:auto;">
         <img src="{% static 'images/feedback_full.png' %}" alt="My image">
     </div>
     <form action="{% url 'feedback_view' %}" method="post">
         {% csrf_token %}
-        <div class="text-center">
-            <button type="submit" class="btn btn-info btn-lg" > Continue </button>
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="text-center col-md-2">
+                <a href="{% url 'question_view' %}" class="btn btn-primary btn-lg">Back</a>
+            </div>
+
+            <div class="text-center col-md-2">
+                <button type="submit" class="btn btn-info btn-lg" > Continue </button>
+            </div>
+            <div class="col-md-4"></div>
         </div>
     </form>
     

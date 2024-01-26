@@ -1,54 +1,60 @@
 {% extends "main/base.html" %}
 {% block content %}
-    <h3 style="text-align: center;">
-        Task Instructions
-    </h3>
-    <div class="row">
-        <div class="col-md-2"></div>
-        <div class="task-instruction col-md-8">
-            {% if user_transparency == "High" %}
-            <p>Thank you for participating in this experiment. This research concerns people’s ability to answer different themed questions while interacting with an artificial intelligent (AI) system.</p>
-            <p>For several decades, AI systems have researched patterns in query systems that can answer questions for a user. The AI system you will be interacting with is designed to answer questions entered by a user based on a smart algorithm. </p>
-            <p>AI systems are now interested in people’s ability to distinguish patterns in query systems. In this experiment, the AI system will make a prediction and we ask you to verify that prediction. On each trial, you will pick one of two actions: “yes” or “no”. Each trial will reflect a question and the AI system’s predicted answer to that question. The AI system will also illustrate an explanation of how it came to that answer and how confident it is in it’s prediction. </p>
-            <p>You will be asked to respond on if you believe that model’s prediction to be correct. You will interact with the AI system to decide whether the system has predicted the correct answer by reviewing the given information.</p>
-            <p>After you respond “yes” or “no” about whether the model’s prediction is correct, you will be given immediate feedback on if you answered correctly. It is your goal to correctly answer the question given the information presented to you. </p>
-
-            {% elif user_transparency == "Mid" %}
-            <p>
-                AI systems are now interested in people’s ability to distinguish patterns in query systems. In this experiment, the AI system will make a prediction and we ask you to verify that prediction. On each trial, you will pick one of two actions: “yes” or “no”. Each trial will reflect a question and the AI system’s predicted answer to that question. The AI system will also illustrate an explanation of how it came to that answer and how confident it is in it’s prediction. 
-            </p>
-            <p>
-                You will be asked to respond on if you believe that model’s prediction to be correct. You will interact with the AI system to decide whether the system has predicted the correct answer by reviewing the given information.
-            </p>
-            <p>
-                After you respond “yes” or “no” about whether the model’s prediction is correct, you will be given immediate feedback on if you answered correctly. It is your goal to correctly answer the question given the information presented to you. 
-            </p>
-
-            {% elif user_transparency == "Low" %}
-            <p>
-                Thank you for participating in this experiment. In this experiment, the AI system will make a prediction and we ask you to verify that prediction. On each trial, you will pick one of two actions: “yes” or “no”. Each trial will reflect a question and the AI system’s predicted answer to that question. 
-            </p>
-
-            <p>
-                You will be asked to respond on if you believe that model’s prediction to be correct. 
-            </p>
-
-            <p>
-                After you respond, you will be given immediate feedback on if you answered correctly. It is your goal to correctly answer the question given the information presented to you.
-            </p>
-            {% endif %}
-            <form action="{% url 'task_one_view' %}" method="post">
-                {% csrf_token %}
-                <div class="text-center" style="text-align: center;">
-                    <input type="submit" class="btn btn-primary btn-lg" >
-                </div>
-            </form>
-            
+    <div class="card card-body" style="margin-top: 20px;">
+        <h3 style="text-align: center;">
+            Task Instructions
+        </h3>
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="task-instruction col-md-8">
+                {% if user_transparency == "High" %}
+                <p>Thank you for participating in this experiment. This research concerns people’s ability to answer different themed questions while interacting with an <b>artificial intelligent (AI) system</b>.</p>
+                <p>For several decades, AI systems have researched patterns in query systems that can answer questions for a user. The AI system you will be interacting with is designed to answer questions entered by a user based on a smart algorithm. </p>
+                <p>AI systems are now interested in people’s ability to distinguish patterns in query systems. In this experiment, the AI system will make a prediction and we ask you to verify that prediction. On each trial, you will pick one of two actions: <b>“yes”</b> or <b>“no”</b>. Each trial will reflect a question and the AI system’s predicted answer to that question. The AI system will also illustrate an explanation of how it came to that answer and how confident it is in it’s prediction. </p>
+                <p>You will be asked to respond on if you believe that model’s prediction to be correct. You will interact with the AI system to decide whether the system has predicted the correct answer by reviewing the given information.</p>
+                <p>After you respond <b>“yes”</b> or <b>“no”</b> about whether the model’s prediction is correct, you will be given immediate feedback on if you answered correctly. It is your goal to correctly answer the question given the information presented to you. </p>
+    
+                {% elif user_transparency == "Mid" %}
+                <p>
+                    AI systems are now interested in people’s ability to distinguish patterns in query systems. In this experiment, the AI system will make a prediction and we ask you to verify that prediction. On each trial, you will pick one of two actions: <b>“yes”</b> or <b>“no”</b>. Each trial will reflect a question and the AI system’s predicted answer to that question. The AI system will also illustrate an explanation of how it came to that answer and how confident it is in it’s prediction. 
+                </p>
+                <p>
+                    You will be asked to respond on if you believe that model’s prediction to be correct. You will interact with the AI system to decide whether the system has predicted the correct answer by reviewing the given information.
+                </p>
+                <p>
+                    After you respond <b>“yes”</b> or <b>“no”</b> about whether the model’s prediction is correct, you will be given immediate feedback on if you answered correctly. It is your goal to correctly answer the question given the information presented to you. 
+                </p>
+    
+                {% elif user_transparency == "Low" %}
+                <p>
+                    Thank you for participating in this experiment. In this experiment, the AI system will make a prediction and we ask you to verify that prediction. On each trial, you will pick one of two actions: <b>“yes”</b> or <b>“no”</b>. Each trial will reflect a question and the AI system’s predicted answer to that question. 
+                </p>
+    
+                <p>
+                    You will be asked to respond on if you believe that model’s prediction to be correct. 
+                </p>
+    
+                <p>
+                    After you respond, you will be given immediate feedback on if you answered correctly. It is your goal to correctly answer the question given the information presented to you.
+                </p>
+                {% endif %}
+                
+                
+            </div>
+            <div class="col-md-2"></div>
         </div>
-        <div class="col-md-2"></div>
 
-        
     </div>
+    <div style="margin-top: 10px;">
+        <form action="{% url 'task_one_view' %}" method="post">
+            {% csrf_token %}
+            <div style="text-align: center;">
+                <button type="submit" class="btn btn-info btn-lg" > Continue </button>
+            </div>
+        </form>
+    </div>
+    
+    
 
     
 </div>

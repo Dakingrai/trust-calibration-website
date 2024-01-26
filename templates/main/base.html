@@ -36,6 +36,9 @@
         <ul class="navbar-nav mr-auto">
           {% if user.is_authenticated %}
             <li><a class="nav-item nav-link" href="{% url 'home' %}">Hi {{user.username}}!</a></li>
+            {% if training %}
+              <li><a class="nav-item nav-link" href="{% url 'task_one_view' %}">Task Instructions</a></li>
+            {% endif %}
             <li><a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a></li>
           {% else %}
           <li><a class="nav-item nav-link" href="{% url 'login' %}">Login</a></li>

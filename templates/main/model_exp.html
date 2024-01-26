@@ -3,13 +3,22 @@
 {% load static %}
     
     
-    <div class="row" style="padding: 35px;">
-        <img src="{% static 'images/model_full.png' %}" alt="My image">
+    <div style="margin: 10px;">
+        <div class="card card-body" style="padding: 20px; height:auto; max-height:80%; overflow:auto; text-align: center; max-width: 90%; float: none; margin: 0 auto !important;">
+            <img src="{% static 'images/model_full.png' %}" alt="My image" >
+        </div>
     </div>
     <form action="{% url 'model_view' %}" method="post">
         {% csrf_token %}
-        <div class="text-center">
-            <button type="submit" class="btn btn-info btn-lg" > Continue </button>
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="text-center col-md-2">
+                <a href="{% url 'database_view' %}" class="btn btn-primary btn-lg">Back</a>
+            </div>
+            <div class="text-center col-md-2">
+                <button type="submit" class="btn btn-info btn-lg" > Continue </button>
+            </div>
+            <div class="col-md-4"></div>
         </div>
     </form>
     

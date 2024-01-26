@@ -202,6 +202,13 @@ def home(request):
         finished_study = False
     print(finished_study)
     print("----------------------------------")
+    
+    study_samples = TrainingStudy.objects.filter(user=request.user, viewed=False).order_by('id').first()
+    if study_samples:
+        training = True
+    else:
+        training = False
+    
     context = {
         'not_responded_count': not_responded_count, 
         'all_count': all_count, 
@@ -211,6 +218,7 @@ def home(request):
         'train_responded': responded_train_count,
         'finished_training': finished_training,
         'finished_study': finished_study,
+        'training': training
         }
     return render(request, 'main/home.html', context)
 
@@ -310,7 +318,7 @@ def begin_train_view(request):
         user_agreement_meta.save()
         return redirect(reverse('start-training-study'))
 
-    return render(request, 'main/begin_train.html', {'user_transparency': user_transparency.user_transparency})
+    return render(request, 'main/begin_train.html', {'user_transparency': user_transparency.user_transparency, 'training': True})
 
 @login_required
 def begin_study_view(request):
@@ -477,73 +485,91 @@ def study(request, pk):
 def task_one_view(request):
     username = request.user.username
     user_transparency = UserTransaprency.objects.filter(username = username).first()
+    user_agreement_meta = UserTrainingMeta.objects.filter(user=request.user).first()
+    user_agreement_meta.question = False
+    user_agreement_meta.feedback = False
+    user_agreement_meta.database = False
+    user_agreement_meta.model_explanation = False
+    user_agreement_meta.explanation_density = False
+    user_agreement_meta.begin_train = False
+    user_agreement_meta.save()
     if request.method == 'POST':
-        user_agreement_meta = UserTrainingMeta.objects.filter(user=request.user).first()
         user_agreement_meta.task_one = True
         user_agreement_meta.save()
         return redirect(reverse('start-training-study'))
 
-    return render(request, 'main/task_instruction1.html', {'user_transparency': user_transparency.user_transparency})
+    return render(request, 'main/task_instruction1.html', {'user_transparency': user_transparency.user_transparency, 'training': True})
 
 @login_required
 def question_view(request):
     username = request.user.username
     user_transparency = UserTransaprency.objects.filter(username = username).first()
+    user_agreement_meta = UserTrainingMeta.objects.filter(user=request.user).first()
+    user_agreement_meta.question = False
+    user_agreement_meta.save()
     if request.method == 'POST':
-        user_agreement_meta = UserTrainingMeta.objects.filter(user=request.user).first()
         user_agreement_meta.question = True
         user_agreement_meta.save()
         return redirect(reverse('start-training-study'))
 
-    return render(request, 'main/ques_exp.html', {'user_transparency': user_transparency.user_transparency})
+    return render(request, 'main/ques_exp.html', {'user_transparency': user_transparency.user_transparency, 'training': True})
 
 @login_required
 def feedback_view(request):
     username = request.user.username
     user_transparency = UserTransaprency.objects.filter(username = username).first()
+    user_agreement_meta = UserTrainingMeta.objects.filter(user=request.user).first()
+    user_agreement_meta.feedback = False
+    user_agreement_meta.save()
     if request.method == 'POST':
-        user_agreement_meta = UserTrainingMeta.objects.filter(user=request.user).first()
         user_agreement_meta.feedback = True
         user_agreement_meta.save()
         return redirect(reverse('start-training-study'))
 
-    return render(request, 'main/feedback_exp.html', {'user_transparency': user_transparency.user_transparency})
+    return render(request, 'main/feedback_exp.html', {'user_transparency': user_transparency.user_transparency, 'training': True})
 
 @login_required
 def database_view(request):
     username = request.user.username
     user_transparency = UserTransaprency.objects.filter(username = username).first()
+    user_agreement_meta = UserTrainingMeta.objects.filter(user=request.user).first()
+    user_agreement_meta.database = False
+    user_agreement_meta.save()
     if request.method == 'POST':
-        user_agreement_meta = UserTrainingMeta.objects.filter(user=request.user).first()
+        
         user_agreement_meta.database = True
         user_agreement_meta.save()
         return redirect(reverse('start-training-study'))
 
-    return render(request, 'main/database_exp.html', {'user_transparency': user_transparency.user_transparency})
+    return render(request, 'main/database_exp.html', {'user_transparency': user_transparency.user_transparency, 'training': True})
 
 @login_required
 def density_view(request):
     username = request.user.username
     user_transparency = UserTransaprency.objects.filter(username = username).first()
+    user_agreement_meta = UserTrainingMeta.objects.filter(user=request.user).first()
+    user_agreement_meta.explanation_density = False
+    user_agreement_meta.save()
     if request.method == 'POST':
-        user_agreement_meta = UserTrainingMeta.objects.filter(user=request.user).first()
         user_agreement_meta.explanation_density = True
         user_agreement_meta.save()
         return redirect(reverse('start-training-study'))
 
-    return render(request, 'main/density_exp.html', {'user_transparency': user_transparency.user_transparency})
+    return render(request, 'main/density_exp.html', {'user_transparency': user_transparency.user_transparency, 'training': True})
 
 @login_required
 def model_view(request):
     username = request.user.username
     user_transparency = UserTransaprency.objects.filter(username = username).first()
+    user_agreement_meta = UserTrainingMeta.objects.filter(user=request.user).first()
+    user_agreement_meta.model_explanation = False
+    user_agreement_meta.save()
     if request.method == 'POST':
-        user_agreement_meta = UserTrainingMeta.objects.filter(user=request.user).first()
         user_agreement_meta.model_explanation = True
         user_agreement_meta.save()
         return redirect(reverse('start-training-study'))
 
-    return render(request, 'main/model_exp.html', {'user_transparency': user_transparency.user_transparency})
+    return render(request, 'main/model_exp.html', {'user_transparency': user_transparency.user_transparency, 'training': True})
 
 @login_required
 def start_training_study(request):
@@ -565,7 +591,7 @@ def start_training_study(request):
             return redirect(reverse('database_view'))
         if user_agreement_meta.model_explanation == False:
             return redirect(reverse('model_view'))
-    if user_transparency.user_transparency == 'High' or user_transparency.user_transparency == 'Mid':
+    if user_transparency.user_transparency == 'High' or user_transparency.user_transparency == 'Medium':
         if user_agreement_meta.explanation_density == False:
             return redirect(reverse('density_view'))
     
@@ -720,7 +746,7 @@ def trainining_study(request, pk):
     # pdb.set_trace()
     TrainingStudy.objects.filter(id=pk, user=request.user).update(start_time= timezone.now()) # update start time
 
-    return render(request, 'main/train_study.html', {'study_sample': context})
+    return render(request, 'main/train_study.html', {'study_sample': context, 'training':True})
 
 
 @login_required

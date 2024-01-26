@@ -4,16 +4,18 @@
         Main Task 
 
     </h3>
-    <div class="card card-body">
+    <div class="card card-body" style="margin: 10px;">
         <p style="text-align: center;">You will now enter the main task which is identical to the practice</p>
-        <div class="row">
-            <form action="{% url 'begin_study_view' %}" method="post">
-                {% csrf_token %}
-                <div class="text-center" style="text-align: center;">
-                    <button type="submit" class="btn btn-primary btn-lg" > Continue </button>
-                </div>
-            </form>
-        </div>
+        
+    </div>
+
+    <div class="row">
+        <form action="{% url 'begin_study_view' %}" method="post">
+            {% csrf_token %}
+            <div class="text-center" style="text-align: center;">
+                <button type="submit" class="btn btn-primary btn-lg" > Continue </button>
+            </div>
+        </form>
     </div>
     
     
