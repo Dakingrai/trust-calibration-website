@@ -140,6 +140,14 @@
             <option value="mid1" class="dropdown-item">Mid Transparency</option>
             <option value="high1" class="dropdown-item">High Transparency</option>
         </select> -->
+        {% if study_sample.transparency == "High" %}
+          <div id="low1" class="my-div card card-body model_exp_body" style="margin:5px 0px;"><h5> The model has an overall confidence of {{study_sample.overall_conf}}% in making this prediction. ​</h5></div>
+        {% endif %}
+
+        {% if study_sample.transparency == "Medium" %}
+          <div id="low1" class="my-div card card-body model_exp_body" style="margin:5px 0px;"><h5> The model has an overall confidence of {{study_sample.overall_conf}}% in making this prediction. ​</h5></div>
+        {% endif %}
+
         <div class="model_exp_body card card-body">
           {% if study_sample.transparency == "Low" %}
             <div id="low1" class="my-div"><h5> The model has an overall confidence of {{study_sample.overall_conf}}% in making this prediction. ​</h5></div>
@@ -352,7 +360,9 @@
               </div>
                 <div style="background-color: #D5D5D5; padding: 5px 15px; margin-top: 10px; font-style: italic; font-weight: bold;">Note: Words highlighted with a stronger color indicate that the model relies more heavily on those words to generate the given output. </div>
             </div>
+
             {% if study_sample.transparency == "Medium" %}
+
             <div id="mid1" class="my-div">
               <h5> The model came up with this prediction due to following highlighted words in question:​ </h5>
               {% for ques, feat in study_sample.ques_and_feat_attr %}
