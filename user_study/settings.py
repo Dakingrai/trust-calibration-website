@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'main.apps.MainConfig',
     'crispy_forms',
     'crispy_bootstrap5',
+    'csvexport',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

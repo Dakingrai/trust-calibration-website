@@ -8,17 +8,20 @@ import ast
 import json
 from django.http import HttpResponseRedirect
 from django.contrib import messages
+from csvexport.actions import csvexport
 
 class JsonUploadForm(forms.Form):
     json_file = forms.FileField()
 
 class StudyAdmin(admin.ModelAdmin):
+    actions = [csvexport]
     list_display = ('id', 'user', 'sample', 'user_response', 'viewed', 'created', 'updated', 'start_time')
     list_filter = ['user']
     save_on_top = True
     list_editable = ['viewed', 'user_response']
 
 class TrainingStudyAdmin(admin.ModelAdmin):
+    actions = [csvexport]
     list_display = ('id', 'user', 'sample', 'user_response', 'viewed', 'created', 'updated', 'start_time')
     list_filter = ['user']
     save_on_top = True
