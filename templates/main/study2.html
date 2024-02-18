@@ -4,45 +4,26 @@
 <script>
   gold_value = "{{study_sample.is_correct_prediction}}";
   $(document).ready(function(){
+    const submitForm = document.getElementById("submitForm");
+    submitForm.addEventListener("click", async (ev) => {
+      ev.preventDefault();
+      var curr_val = $(document.activeElement).val();
 
-    $('#yesButton').click(function(event){
-        // This function will only be triggered when the button is clicked
-        var curr_val = $(this).val();
-        console.log("Button Value = " + curr_val);
-        console.log("gold value = " + gold_value);
-        $("#my_submit").val(curr_val);
-        $('#my_submit').show();
-        $("#yesButton").prop("disabled", true);
-        $("#noButton").prop("disabled", true);
+      console.log("Button Value = " + curr_val);
+      console.log("gold value = " + gold_value);
+      $("#my_submit").val(curr_val);
+      $('#my_submit').show();
+      $("#yesButton").prop("disabled", true);
+      $("#noButton").prop("disabled", true);
+      if (gold_value==curr_val){
+        $('.correct-prediction').show()
+      }
 
-        if (gold_value==curr_val){
-          $('.correct-prediction').show()
-        }
+      if (gold_value!=curr_val){
+        $('.incorrect-prediction').show()
+      }
 
-        if (gold_value!=curr_val){
-          $('.incorrect-prediction').show()
-        }
-    });
-
-    $('#noButton').click(function(event){
-        // This function will only be triggered when the button is clicked
-        var curr_val = $(this).val();
-        console.log("Button Value = " + curr_val);
-        console.log("gold value = " + gold_value);
-        $("#my_submit").val(curr_val);
-        $('#my_submit').show();
-        $("#yesButton").prop("disabled", true);
-        $("#noButton").prop("disabled", true);
-
-        if (gold_value==curr_val){
-          $('.correct-prediction').show()
-        }
-
-        if (gold_value!=curr_val){
-          $('.incorrect-prediction').show()
-        }
-    });
- 
+    }); 
   });
   </script>
 
@@ -382,7 +363,7 @@
             </div>
 
             {% if study_sample.transparency == "Medium" %}
-            
+
             <div id="mid1" class="my-div">
               <h5> The model came up with this prediction due to following highlighted words in question:​ </h5>
               {% for ques, feat in study_sample.ques_and_feat_attr %}
@@ -401,18 +382,22 @@
 
     <div style="display:flex; align-items: center; margin-top: 10px; margin-bottom: 30px;">
         <form id="submitForm">
-          <button name="btn_value1" id="yesButton" value="1" class="btn btn-primary btn-lg" style="margin-right:40px">Yes</button>
-          <button name="btn_value0" id="noButton" value="0" class="btn btn btn-danger btn-lg" style="margin-right:40px">No</button>
+          <!-- <button name="btn_value1" id="yesButton" value="1" class="btn btn-primary btn-lg" style="margin-right:40px">Yes</button>
+          <button name="btn_value0" id="noButton" value="0" class="btn btn btn-danger btn-lg" style="margin-right:40px">No</button> -->
+          <div style="display: inline;">
+            <button name="btn_value1" id="yesButton" value="1" class="btn btn-primary btn-lg mr-40" >Yes</button>
+          </div>
+          <div style="display: inline; margin-right: 40px;">
+          </div>
+          <div style="display: inline;">
+            <button name="btn_value0" id="noButton" value="0" class="btn btn btn-danger btn-lg">No</button>
+          </div>
+          
         </form>
         <form method = "POST">
           {% csrf_token %}
-          <button type="submit" name="btn_value" id="my_submit" class="btn btn btn-warning btn-lg" style="display: None;"> Next Example </button>
+          <button type="submit" name="sumbit_btn_value" id="my_submit" class="btn btn btn-warning btn-lg" style="display: None;"> Next Example </button>
         </form>
     </div>
-
-    
-    
-    
-  </br>
 
 {% endblock content %}

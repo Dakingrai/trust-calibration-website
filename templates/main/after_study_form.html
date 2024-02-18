@@ -1,0 +1,12 @@
+{% extends "main/base.html" %}
+{% block content %}
+<form action="{% url 'form-after' %}" method="post">
+{% csrf_token %}
+    <div class="form-group">
+        <h6 for="comment" style="margin-top: 25px;">Describe your experience or any issues encountered during survey:</h6>
+        <textarea class="form-control" rows="8" id="form_after" name="form_after" class="form_after" required></textarea>
+    </div>
+    <br>
+    <input type="submit" value="Submit" class="btn btn-primary">
+</form>
+{% endblock content %}

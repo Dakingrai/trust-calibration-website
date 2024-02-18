@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .models import UserTrainingMeta, UserDemographic, Samples, Study, TrainingStudy, TrainingSamples, db_test, Hyperparameters, SqlExplanation, Spider_db, UserTransaprency, UserAgreement, UserTrust, JianTrustScale
+from .models import UserTrainingMeta, UserDemographic, Samples, Study, TrainingStudy, TrainingSamples, db_test, Hyperparameters, SqlExplanation, Spider_db, UserTransaprency, UserAgreement, UserTrust, JianTrustScale, FormAfterStudy
 from .forms import StudyForm
 import random
 from django.http import HttpResponse
@@ -134,6 +134,23 @@ def process_jian_scale_after(request):
     UserJianScaleInstance.system_familiar = request.POST.get('familiar_system')
     UserJianScaleInstance.save()
     return redirect(reverse('start-study'))
+
+@login_required
+def process_form_after(request):
+    if request.method == 'POST':
+        form_after = request.POST.get('form_after')
+        print(form_after)
+        if form_after == '-1':
+            messages.error(request, f'You have to answer all the questions to proceed!')
+            return redirect(reverse('home'))
+        FormAfterInstance = FormAfterStudy(user=request.user)
+        FormAfterInstance.user_response = form_after
+        FormAfterInstance.start_time = timezone.now()
+        FormAfterInstance.save()
+        return redirect(reverse('start-study'))
+    else:
+        return redirect(reverse('start-study'))
+
 
 @login_required
 def process_user_trust_after(request):
@@ -271,6 +288,11 @@ def start_study(request):
         jian_scale = JianTrustScale.objects.filter(user=request.user, before_study=False).count()
         if jian_scale == 0:
             return render(request, 'main/jian_scale_after.html')
+        
+        after_study_form = FormAfterStudy.objects.filter(user=request.user).count()
+        if after_study_form == 0:
+            return render(request, 'main/after_study_form.html')
+        
         messages.success(request, f'You have completed the study!')
         return redirect(reverse('home'))
 
@@ -346,7 +368,10 @@ def study(request, pk):
     if study_sample.user_response is not None:
         return redirect(reverse('start-study'))
     if request.method == 'POST':
-        btn_value = bool(int(request.POST.get('btn_value')))
+        try:
+            btn_value = bool(int(request.POST.get('sumbit_btn_value')))
+        except:
+            pdb.set_trace()
         if btn_value:
             study_sample.user_response = True
         else:
@@ -612,7 +637,10 @@ def trainining_study(request, pk):
     if study_sample.user_response is not None:
         return redirect(reverse('start-training-study'))
     if request.method == 'POST':
-        btn_value = bool(int(request.POST.get('btn_value')))
+        try:
+            btn_value = bool(int(request.POST.get('btn_value')))
+        except:
+            pdb.set_trace()
         if btn_value:
             study_sample.user_response = True
         else:

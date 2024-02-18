@@ -114,6 +114,19 @@ class Study(models.Model):
         self.updated = timezone.now()
         return super(Study, self).save(*args, **kwargs)
 
+class FormAfterStudy(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_response = models.TextField(blank=False, null=False)
+    created = models.DateTimeField(editable=False)
+    updated = models.DateTimeField()
+    start_time = models.DateTimeField(blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.updated = timezone.now()
+        return super(FormAfterStudy, self).save(*args, **kwargs)
 
 class TrainingStudy(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -145,15 +158,18 @@ class SqlExplanation(models.Model):
     def __str__(self):
         return self.database_name
     
+
 class UserTransaprency(models.Model):
     username = models.CharField(max_length=100, blank=True, null=True)
     user_transparency = models.CharField(max_length=100, default="Low")
+
 
 class UserAgreement(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     user_agreement_status = models.BooleanField(default=False)
     user_agreement_time = models.DateTimeField(blank=True, null=True)
     user_agreement = models.TextField(blank=True, null=True)
+
 
 class UserTrust(models.Model):
     TRUST_LEVEL = (
