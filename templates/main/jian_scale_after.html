@@ -188,9 +188,10 @@
     <hr>
 
     <div class="card card-body">
-        <span class="card-title"><b>SELF REPORT: </b> Now that you have interacted with AI system, please answer (1-7) the following questions based on your <b>expectation</b> of system performance.</span>
+        <span class="card-title"><b>SELF REPORT: </b> Now that you have interacted with AI system, please answer (1-7) the following questions based on your <b>expectation</b> of system performance. sdfasdf</span>
     </div>
     <hr>
+    
     <form action="{% url 'jian-scale-after' %}" method="post">
         {% csrf_token %}
         
@@ -300,7 +301,7 @@
                     <input type="range" class="form-range" min="1" max="7" id="systemIntegrityForm" onchange="SystemIntegrity(this.value);"> 
                 </div>
                 <div class="col-md-1">
-                    <input class="form-control" type="number" name="system_integrity" id="systemIntegrity" value="-1" min="1" max="7" required onchange="SystemSecurityForm(this.value)">
+                    <input class="form-control" type="number" name="system_integrity" id="systemIntegrity" value="-1" min="1" max="7" required onchange="SystemIntegrityForm(this.value)">
                 </div>
                 <div class="col-md-3">
                 </div>
