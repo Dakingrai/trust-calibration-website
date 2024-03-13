@@ -28,8 +28,14 @@ class TrainingStudyAdmin(admin.ModelAdmin):
     list_editable = ['viewed', 'user_response']
 
 class UserTransaprencyAdmin(admin.ModelAdmin):
+    actions = [csvexport]
     list_display = ('username', 'user_transparency')
     list_editable = ['user_transparency']
+    save_on_top = True
+
+class UserDemographicAdmin(admin.ModelAdmin):
+    actions = [csvexport]
+    list_display = ('name', 'age', 'gender', 'race')
     save_on_top = True
     
 class SamplesAdmin(admin.ModelAdmin):
@@ -82,7 +88,7 @@ admin.site.register(TrainingStudy, TrainingStudyAdmin)
 admin.site.register(UserTrust)
 admin.site.register(UserAgreement)
 admin.site.register(JianTrustScale)
-admin.site.register(UserDemographic)
+admin.site.register(UserDemographic, UserDemographicAdmin)
 admin.site.register(FormAfterStudy)
 admin.site.site_header = "Trust Calibration Admin"
 
